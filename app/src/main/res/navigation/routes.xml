@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/routes"
+    app:startDestination="@id/nav_search_doctors">
+
+    <fragment
+        android:id="@+id/nav_search_doctors"
+        android:name="com.animo.ru.ui.search.doctors.SearchDoctorsFragment"
+        android:label="@string/m_searchDoctors_title"
+        tools:layout="@layout/fragment_search_doctors" />
+    <fragment
+        android:id="@+id/nav_search_pharmacy"
+        android:name="com.animo.ru.ui.search.pharmacy.SearchPharmacyFragment"
+        android:label="@string/m_searchPharmacy_title"
+        tools:layout="@layout/fragment_search_pharmacy" />
+</navigation>

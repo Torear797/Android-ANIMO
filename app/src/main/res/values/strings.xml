@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ANIMO</string>
+    <string name="login_title">Авторизация</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="hint_password">Пароль</string>
+    <string name="hint_email">Логин</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="m_searchDoctors_title">Поиск доктора</string>
+    <string name="m_searchPharmacy_title">Поиск аптеки</string>
+    <string name="nav_header_desc">Navigation header</string>
+</resources>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="Добавить">
+        <menu>
+            <group
+                android:id="@+id/grp1"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/fragment3"
+                    android:icon="@drawable/ic_launcher_background"
+                    android:title="Доктора" />
+                <item
+                    android:id="@+id/fragment4"
+                    android:icon="@drawable/ic_launcher_background"
+                    android:title="Аптеку" />
+            </group>
+        </menu>
+    </item>
+
+    <group
+        android:id="@+id/grp2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_search_doctors"
+            android:icon="@android:drawable/ic_search_category_default"
+            android:title="@string/m_searchDoctors_title" />
+        <item
+            android:id="@+id/nav_search_pharmacy"
+            android:icon="@android:drawable/ic_search_category_default"
+            android:title="@string/m_searchPharmacy_title" />
+
+        <item
+            android:id="@+id/fragment5"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Планы/Отчеты" />
+        <item
+            android:id="@+id/fragment6"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Вневизитная активность" />
+    </group>
+
+    <item android:title="Статистика">
+        <menu>
+            <group
+                android:id="@+id/grp3"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/fragment7"
+                    android:icon="@drawable/ic_launcher_background"
+                    android:title="Визиты" />
+
+                <item
+                    android:id="@+id/fragment8"
+                    android:icon="@drawable/ic_launcher_background"
+                    android:title="Акты" />
+
+            </group>
+        </menu>
+    </item>
+
+    <group
+        android:id="@+id/grp4"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/fragment9"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Препараты" />
+
+        <item
+            android:id="@+id/fragment10"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Мероприятия" />
+    </group>
+
+</menu>
