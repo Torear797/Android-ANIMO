@@ -3,6 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Профиль" />
+    <item
+        android:id="@+id/nav_cur_visits"
+        android:icon="@android:drawable/star_on"
+        android:title="Текущие визиты" />
+
     <item android:title="Добавить">
         <menu>
             <group
@@ -31,48 +40,43 @@
             android:id="@+id/nav_search_pharmacy"
             android:icon="@android:drawable/ic_search_category_default"
             android:title="@string/m_searchPharmacy_title" />
-
-        <item
-            android:id="@+id/fragment5"
-            android:icon="@drawable/ic_launcher_background"
-            android:title="Планы/Отчеты" />
-        <item
-            android:id="@+id/fragment6"
-            android:icon="@drawable/ic_launcher_background"
-            android:title="Вневизитная активность" />
     </group>
 
-    <item android:title="Статистика">
+
+    <item android:title="Активность">
         <menu>
             <group
                 android:id="@+id/grp3"
                 android:checkableBehavior="single">
-                <item
-                    android:id="@+id/fragment7"
-                    android:icon="@drawable/ic_launcher_background"
-                    android:title="Визиты" />
 
                 <item
-                    android:id="@+id/fragment8"
+                    android:id="@+id/fragment5"
                     android:icon="@drawable/ic_launcher_background"
-                    android:title="Акты" />
-
+                    android:title="Планы/Отчеты" />
+                <item
+                    android:id="@+id/fragment6"
+                    android:icon="@drawable/ic_launcher_background"
+                    android:title="Вневизитная активность" />
             </group>
         </menu>
     </item>
 
+    <item
+        android:id="@+id/nav_prepatats"
+        android:icon="@drawable/ic_baseline_medical_services_24"
+        android:title="Препараты" />
+
     <group
-        android:id="@+id/grp4"
+        android:id="@+id/dopOptions"
         android:checkableBehavior="single">
-        <item
-            android:id="@+id/fragment9"
-            android:icon="@drawable/ic_launcher_background"
-            android:title="Препараты" />
 
         <item
-            android:id="@+id/fragment10"
-            android:icon="@drawable/ic_launcher_background"
-            android:title="Мероприятия" />
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="Настройки" />
+        <item
+            android:id="@+id/menuLogout"
+            android:icon="@drawable/ic_baseline_exit_to_app_24"
+            android:title="Выход" />
     </group>
 
 </menu>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/routes"
-    app:startDestination="@id/nav_search_doctors">
+    app:startDestination="@id/nav_profile">
 
     <fragment
         android:id="@+id/nav_search_doctors"
@@ -15,4 +15,16 @@
         android:name="com.animo.ru.ui.search.pharmacy.SearchPharmacyFragment"
         android:label="@string/m_searchPharmacy_title"
         tools:layout="@layout/fragment_search_pharmacy" />
+
+    <fragment
+        android:id="@+id/nav_cur_visits"
+        android:name="com.animo.ru.ui.currentVisits.CurrentVisitsFragment"
+        android:label="@string/m_cur_visits"
+        tools:layout="@layout/fragment_current_visits" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.animo.ru.ui.profile.ProfileFragment"
+        android:label="@string/m_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

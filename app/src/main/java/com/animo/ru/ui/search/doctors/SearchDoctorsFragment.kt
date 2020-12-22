@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.animo.ru.R
 import com.animo.test.ui.home.HomeViewModel
-import kotlinx.android.synthetic.main.fragment_search_doctors.*
 
 class SearchDoctorsFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
@@ -23,7 +21,7 @@ class SearchDoctorsFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_search_doctors, container, false)
         homeViewModel.text.observe(viewLifecycleOwner, {
-            text_home.text = it
+//            text_home.text = it
         })
         return root
     }
