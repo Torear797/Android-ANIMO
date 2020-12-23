@@ -1,8 +1,6 @@
 package com.animo.ru.ui.menu
 
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +13,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.animo.ru.App
 import com.animo.ru.R
-import com.animo.ru.utilities.showToast
 import com.google.android.material.navigation.NavigationView
+
 
 class MenuActivity : AppCompatActivity() {
 
@@ -37,11 +35,22 @@ class MenuActivity : AppCompatActivity() {
                 R.id.nav_search_doctors,
                 R.id.nav_search_pharmacy,
                 R.id.nav_cur_visits,
-                R.id.nav_profile
+                R.id.nav_profile,
+                R.id.nav_logout
             ), drawerLayout
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.nav_logout -> {
+                    App.logout(applicationContext, this)
+                }
+            }
+        }
+
+
         navView.setupWithNavController(navController)
 
         val header: View = navView.getHeaderView(0)
@@ -51,21 +60,11 @@ class MenuActivity : AppCompatActivity() {
         fio.text = "Здравствуйте, ${App.user.first_name}"
         role.text = "Ваша Роль: ${App.user.getRoleString()}"
         avatarText.text = App.user.getInitials()
+
+
     }
 
     override fun onSupportNavigateUp(): Boolean =
         findNavController(R.id.nav_host_fragment).navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuLogout -> {
-                showToast("Выход")
-                return true
-            }
-        }
-        Log.v("TWQE", "ewf")
-        return super.onOptionsItemSelected(item)
-    }
-
 
 }

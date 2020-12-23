@@ -15,7 +15,17 @@ interface RetrofitServices {
         @Field("password") password: String?,
         @Field("device_id") device_id: String?,
         @Field("getToken") getToken: Boolean,
-        @Field("remember_me") remember_me: String
+        @Field("remember_me") remember_me: String,
+        @Field("device_info") device_info: String,
+        @Field("type_device") type_device: String
+    ): Call<LoginAnswer>
+
+    @FormUrlEncoded
+    @POST("User/reLogin")
+    fun reLogin(
+        @Field("token") token: String,
+        @Field("device_info") device_info: String,
+        @Field("type_device") type_device: String
     ): Call<LoginAnswer>
 
     @FormUrlEncoded

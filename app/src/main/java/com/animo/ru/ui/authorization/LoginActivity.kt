@@ -2,10 +2,12 @@ package com.animo.ru.ui.authorization
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
@@ -101,7 +103,7 @@ class LoginActivity : AppCompatActivity() {
         Hawk.put("login", username.text.toString())
         login_btn.isEnabled = false
 
-        mService.login(username.text.toString(), password.text.toString(), deviceId, true, "false").enqueue(
+        mService.login(username.text.toString(), password.text.toString(), deviceId, true, "false", Build.MANUFACTURER + " " + Build.MODEL, "Android").enqueue(
             object : Callback<LoginAnswer> {
                 override fun onFailure(call: Call<LoginAnswer>, t: Throwable) {
                     error()

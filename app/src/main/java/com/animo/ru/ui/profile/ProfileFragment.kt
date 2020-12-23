@@ -41,7 +41,8 @@ class ProfileFragment : Fragment() {
         createDate.text = App.user.create_date
 
         logoutBtn.setOnClickListener {
-            logout()
+           // logout()
+            App.logout(requireContext(), requireActivity())
         }
 
         return view

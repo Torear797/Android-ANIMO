@@ -27,4 +27,9 @@
         android:name="com.animo.ru.ui.profile.ProfileFragment"
         android:label="@string/m_profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_logout"
+        android:name="com.animo.ru.ui.LogoutFragment"
+        />
 </navigation>
