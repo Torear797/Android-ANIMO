@@ -19,7 +19,7 @@ class CurrentVisitsFragment : Fragment(), PlansAdapter.OnItemClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view: View = inflater.inflate(R.layout.fragment_current_visits, container, false)
 
         val visitsList = view.findViewById<RecyclerView>(R.id.visitsList)

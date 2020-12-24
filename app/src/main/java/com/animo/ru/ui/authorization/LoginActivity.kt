@@ -7,18 +7,16 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.animo.ru.App
+import com.animo.ru.App.Companion.mService
 import com.animo.ru.R
 import com.animo.ru.models.User
 import com.animo.ru.models.answers.LoginAnswer
 import com.animo.ru.models.answers.UserInfoAnswer
-import com.animo.ru.retrofit.Common
-import com.animo.ru.retrofit.RetrofitServices
 import com.animo.ru.ui.menu.MenuActivity
 import com.animo.ru.utilities.showToast
 import com.google.android.material.button.MaterialButton
@@ -31,14 +29,12 @@ import retrofit2.Response
 
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var mService: RetrofitServices
-
     private var deviceId = ""
     private lateinit var username: TextInputEditText
     private lateinit var password: TextInputEditText
     private lateinit var pass: TextInputLayout
     private lateinit var textInputLayoutLogin: TextInputLayout
-    private lateinit var login_btn: MaterialButton
+    private lateinit var loginBtn: MaterialButton
 
     @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,15 +46,13 @@ class LoginActivity : AppCompatActivity() {
         password = findViewById(R.id.password)
         pass = findViewById(R.id.pass)
         textInputLayoutLogin = findViewById(R.id.textInputLayoutLogin)
-        login_btn = findViewById(R.id.login_btn)
+        loginBtn = findViewById(R.id.login_btn)
 
         setSupportActionBar(toolbar)
 
         supportActionBar?.apply {
             title = baseContext.resources.getString(R.string.login_title)
         }
-
-        mService = Common.retrofitService
 
         deviceId =
             Settings.Secure.getString(
@@ -83,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        login_btn.setOnClickListener {
+        loginBtn.setOnClickListener {
             login()
         }
 
@@ -96,14 +90,22 @@ class LoginActivity : AppCompatActivity() {
 
     private fun error() {
         showToast(getString(R.string.error_server_lost))
-        login_btn.isEnabled = true
+        loginBtn.isEnabled = true
     }
 
     private fun sendLoginRequest() {
         Hawk.put("login", username.text.toString())
-        login_btn.isEnabled = false
+        loginBtn.isEnabled = false
 
-        mService.login(username.text.toString(), password.text.toString(), deviceId, true, "false", Build.MANUFACTURER + " " + Build.MODEL, "Android").enqueue(
+        mService.login(
+            username.text.toString(),
+            password.text.toString(),
+            deviceId,
+            true,
+            "false",
+            Build.MANUFACTURER + " " + Build.MODEL,
+            "Android"
+        ).enqueue(
             object : Callback<LoginAnswer> {
                 override fun onFailure(call: Call<LoginAnswer>, t: Throwable) {
                     error()
@@ -129,7 +131,7 @@ class LoginActivity : AppCompatActivity() {
                             response.body()!!.text?.let { showToast(it) }
                     }
 
-                    login_btn.isEnabled = true
+                    loginBtn.isEnabled = true
                 }
             })
     }
@@ -169,7 +171,7 @@ class LoginActivity : AppCompatActivity() {
                             response.body()!!.text?.let { showToast(it) }
                     }
 
-                    login_btn.isEnabled = true
+                    loginBtn.isEnabled = true
                 }
             })
     }
@@ -189,7 +191,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            login_btn.isEnabled = isValidate()
+            loginBtn.isEnabled = isValidate()
         }
     }
 

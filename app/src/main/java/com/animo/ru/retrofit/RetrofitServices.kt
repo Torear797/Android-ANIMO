@@ -1,6 +1,7 @@
 package com.animo.ru.retrofit
 
 import com.animo.ru.models.answers.LoginAnswer
+import com.animo.ru.models.answers.MedicationDataAnswer
 import com.animo.ru.models.answers.UserInfoAnswer
 import retrofit2.Call
 import retrofit2.http.Field
@@ -33,4 +34,10 @@ interface RetrofitServices {
     fun getUserInfo(
         @Field("token") token: String
     ): Call<UserInfoAnswer>
+
+    @FormUrlEncoded
+    @POST("PreparatManagement/list")
+    fun getMedicationsData(
+        @Field("token") token: String
+    ): Call<MedicationDataAnswer>
 }

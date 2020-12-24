@@ -9,9 +9,8 @@
     <string name="m_searchPharmacy_title">Поиск аптеки</string>
     <string name="m_cur_visits">Текущие визиты</string>
     <string name="m_profile">Профиль</string>
-    <string name="nav_header_desc">Navigation header</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Препараты</string>
     <string name="text_start_visit">Начать визит</string>
     <string name="text_end_visit">Закончить визит</string>
     <string name="text_default_start_visit">Начало визита:</string>
@@ -22,4 +21,5 @@
     <string name="phone_txt">Телефон</string>
     <string name="email_txt">Email</string>
     <string name="create_date_txt">Дата создания</string>
+    <string name="preparations_text">Препараты</string>
 </resources>

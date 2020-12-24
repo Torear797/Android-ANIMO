@@ -30,6 +30,11 @@
 
     <fragment
         android:id="@+id/nav_logout"
-        android:name="com.animo.ru.ui.LogoutFragment"
-        />
+        android:name="com.animo.ru.ui.LogoutFragment" />
+
+    <fragment
+        android:id="@+id/nav_preparations"
+        android:name="com.animo.ru.ui.preparations.PreparationsFragment"
+        android:label="@string/preparations_text"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

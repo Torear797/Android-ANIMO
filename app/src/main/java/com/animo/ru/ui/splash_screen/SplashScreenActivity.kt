@@ -19,14 +19,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SplashScreenActivity : AppCompatActivity(){
-    private lateinit var mService: RetrofitServices
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val saveUser = Hawk.get<User>("user", null)
         if(saveUser != null) {
             App.user = saveUser
-            mService = Common.retrofitService
             sendReLoginRequest()
         } else {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -34,10 +32,9 @@ class SplashScreenActivity : AppCompatActivity(){
         }
     }
 
-
     private fun sendReLoginRequest() {
         App.user.token?.let {
-            mService.reLogin(it, Build.MANUFACTURER + " " + Build.MODEL, "Android").enqueue(
+            App.mService.reLogin(it, Build.MANUFACTURER + " " + Build.MODEL, "Android").enqueue(
                 object : Callback<LoginAnswer> {
                     override fun onFailure(call: Call<LoginAnswer>, t: Throwable) {
                         showToast(getString(R.string.error_server_lost))

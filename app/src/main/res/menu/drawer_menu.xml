@@ -6,11 +6,11 @@
     <item
         android:id="@+id/nav_profile"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="Профиль" />
+        android:title="@string/m_profile" />
     <item
         android:id="@+id/nav_cur_visits"
         android:icon="@android:drawable/star_on"
-        android:title="Текущие визиты" />
+        android:title="@string/m_cur_visits" />
 
     <item android:title="Добавить">
         <menu>
@@ -62,9 +62,9 @@
     </item>
 
     <item
-        android:id="@+id/nav_prepatats"
+        android:id="@+id/nav_preparations"
         android:icon="@drawable/ic_baseline_medical_services_24"
-        android:title="Препараты" />
+        android:title="@string/preparations_text" />
 
     <group
         android:id="@+id/dopOptions"
