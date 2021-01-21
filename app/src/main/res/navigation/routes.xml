@@ -36,5 +36,15 @@
         android:id="@+id/nav_preparations"
         android:name="com.animo.ru.ui.preparations.PreparationsFragment"
         android:label="@string/preparations_text"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_preparations" >
+        <action
+            android:id="@+id/action_nav_preparations_to_nav_info_package"
+            app:destination="@id/nav_info_package" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_info_package"
+        android:name="com.animo.ru.ui.preparations.infoPackage.InfoPackageFragment"
+        android:label="@string/infoPackageText"
+        tools:layout="@layout/fragment_info_package" />
 </navigation>

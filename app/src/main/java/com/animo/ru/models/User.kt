@@ -1,5 +1,7 @@
 package com.animo.ru.models
 
+import com.animo.ru.models.answers.LoginAnswer
+
 data class User(
     var id: Int? = null,
     var first_name: String? = null,
@@ -13,6 +15,8 @@ data class User(
     var create_date: String? = null,
     var token: String? = null,
     var exp: String? = null,
+    var refreshToken: String? = null,
+    var refreshExp: String? = null
 ) {
     fun getInitials(): String =
         (first_name?.get(0) ?: "0").toString() + (surname?.get(0) ?: "0").toString()
@@ -38,5 +42,12 @@ data class User(
         }
 
         return resault;
+    }
+
+    fun setNewTokens(token: String?, exp: String?, refreshToken: String?, refreshExp: String?) {
+        this.token = token
+        this.exp = exp
+        this.refreshToken = refreshToken
+        this.refreshExp = refreshExp
     }
 }

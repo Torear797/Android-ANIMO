@@ -8,8 +8,6 @@ import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.User
 import com.animo.ru.models.answers.LoginAnswer
-import com.animo.ru.retrofit.Common
-import com.animo.ru.retrofit.RetrofitServices
 import com.animo.ru.ui.authorization.LoginActivity
 import com.animo.ru.ui.menu.MenuActivity
 import com.animo.ru.utilities.showToast
@@ -17,13 +15,14 @@ import com.orhanobut.hawk.Hawk
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
-class SplashScreenActivity : AppCompatActivity(){
+class SplashScreenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val saveUser = Hawk.get<User>("user", null)
-        if(saveUser != null) {
+        if (saveUser != null) {
             App.user = saveUser
             sendReLoginRequest()
         } else {
@@ -34,29 +33,48 @@ class SplashScreenActivity : AppCompatActivity(){
 
     private fun sendReLoginRequest() {
         App.user.token?.let {
-            App.mService.reLogin(it, Build.MANUFACTURER + " " + Build.MODEL, "Android").enqueue(
-                object : Callback<LoginAnswer> {
-                    override fun onFailure(call: Call<LoginAnswer>, t: Throwable) {
-                        showToast(getString(R.string.error_server_lost))
-                    }
+            App.user.refreshToken?.let { it1 ->
+                App.mService.reLogin(it, it1, Build.MANUFACTURER + " " + Build.MODEL, "Android")
+                    .enqueue(
+                        object : Callback<LoginAnswer> {
+                            override fun onFailure(call: Call<LoginAnswer>, t: Throwable) {
+                                showToast(getString(R.string.error_server_lost))
+                                App.logout(applicationContext, this@SplashScreenActivity)
+                            }
 
-                    override fun onResponse(
-                        call: Call<LoginAnswer>,
-                        response: Response<LoginAnswer>
-                    ) {
-                        if (response.isSuccessful && response.body() != null) {
-                            if (response.body()!!.status == 200.toShort()) {
-                                startActivity(Intent(applicationContext, MenuActivity::class.java))
-                                finish()
+                            override fun onResponse(
+                                call: Call<LoginAnswer>,
+                                response: Response<LoginAnswer>
+                            ) {
+                                if (response.isSuccessful && response.body() != null) {
+                                    if (response.body()!!.status == 200.toShort()) {
+                                        App.user.setNewTokens(
+                                            response.body()!!.token,
+                                            response.body()!!.exp,
+                                            response.body()!!.refreshToken,
+                                            response.body()!!.refreshExp
+                                        )
+                                        startActivity(
+                                            Intent(
+                                                applicationContext,
+                                                MenuActivity::class.java
+                                            )
+                                        )
+                                        finish()
+                                    } else {
+                                        response.body()!!.text?.let { it -> showToast(it) }
+                                        startActivity(
+                                            Intent(
+                                                applicationContext,
+                                                LoginActivity::class.java
+                                            )
+                                        )
+                                        finish()
+                                    }
+                                }
                             }
-                            else {
-                                response.body()!!.text?.let { it -> showToast(it) }
-                                startActivity(Intent(applicationContext, LoginActivity::class.java))
-                                finish()
-                            }
-                        }
-                    }
-                })
+                        })
+            }
         }
     }
 }

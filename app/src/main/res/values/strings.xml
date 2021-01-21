@@ -22,4 +22,5 @@
     <string name="email_txt">Email</string>
     <string name="create_date_txt">Дата создания</string>
     <string name="preparations_text">Препараты</string>
+    <string name="infoPackageText">Информационные пакеты</string>
 </resources>

@@ -15,7 +15,7 @@ class MedicationsAdapter(
     RecyclerView.Adapter<MedicationsAdapter.MedicationHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(medication: Medication)
+        fun onItemClick(medicationId: Int)
     }
 
     inner class MedicationHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -29,7 +29,7 @@ class MedicationsAdapter(
 
         override fun onClick(v: View?) {
             if (adapterPosition != RecyclerView.NO_POSITION)
-                preparations[getPositionKey(adapterPosition)]?.let { listener.onItemClick(it) }
+                preparations[getPositionKey(adapterPosition)]?.let { listener.onItemClick(getPositionKey(adapterPosition)) }
         }
     }
 

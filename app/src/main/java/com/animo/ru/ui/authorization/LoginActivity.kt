@@ -102,7 +102,6 @@ class LoginActivity : AppCompatActivity() {
             password.text.toString(),
             deviceId,
             true,
-            "false",
             Build.MANUFACTURER + " " + Build.MODEL,
             "Android"
         ).enqueue(
@@ -120,10 +119,14 @@ class LoginActivity : AppCompatActivity() {
                             response.body()!!.user_id?.let {
                                 response.body()!!.token?.let { it1 ->
                                     response.body()!!.exp?.let { it2 ->
-                                        sendGetUserInfoRequest(
-                                            it,
-                                            it1, it2
-                                        )
+                                        response.body()!!.refreshToken?.let { it3 ->
+                                            response.body()!!.refreshExp?.let { it4 ->
+                                                sendGetUserInfoRequest(
+                                                    it,
+                                                    it1, it2, it3, it4
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -136,7 +139,7 @@ class LoginActivity : AppCompatActivity() {
             })
     }
 
-    private fun sendGetUserInfoRequest(UserId: Int, Token: String, exp: String) {
+    private fun sendGetUserInfoRequest(UserId: Int, Token: String, exp: String, refreshToken: String, refreshExp: String) {
         mService.getUserInfo(Token).enqueue(
             object : Callback<UserInfoAnswer> {
                 override fun onFailure(call: Call<UserInfoAnswer>, t: Throwable) {
@@ -161,7 +164,9 @@ class LoginActivity : AppCompatActivity() {
                                 response.body()!!.userInfo?.regions,
                                 response.body()!!.userInfo?.create_date,
                                 Token,
-                                exp
+                                exp,
+                                refreshToken,
+                                refreshExp
                             )
 
                             Hawk.put("user", App.user)

@@ -14,6 +14,7 @@ import com.animo.ru.R
 import com.animo.ru.models.LastInfoPackage
 import com.animo.ru.models.Medication
 import com.animo.ru.models.answers.MedicationDataAnswer
+import com.animo.ru.ui.menu.MenuActivity.Companion.navController
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.showToast
 import com.google.android.material.tabs.TabLayout
@@ -99,7 +100,11 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
 //        myBottomSheet.show(childFragmentManager, myBottomSheet.tag)
     }
 
-    override fun onItemClick(medication: Medication) {
+    override fun onItemClick(medicationId: Int) {
+        val bundle = Bundle()
+        bundle.putInt("medicationId", medicationId)
+        bundle.putInt("infoPackageId", 0)
+        navController.navigate(R.id.nav_info_package, bundle)
     }
 
     private fun sendGetMedicationsDataRequest() {
