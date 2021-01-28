@@ -28,6 +28,7 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
     private var lastInfoPackages: MutableMap<Int, LastInfoPackage>? = null
     private var preparations: MutableMap<Int, Medication>? = null
     private val mFragmentTitleList = listOf("Последние инфопакеты", "Препараты")
+    private var currentPosition = 0
 
     private lateinit var viewpager: ViewPager2
 
@@ -53,7 +54,9 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
 
     override fun onStart() {
         super.onStart()
-        sendGetMedicationsDataRequest();
+        if (preparations == null && lastInfoPackages == null) {
+            sendGetMedicationsDataRequest()
+        }
     }
 
     internal inner class ViewPagerAdapter :
@@ -70,8 +73,9 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
 
         override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
             (holder.view as? RecyclerView)?.also {
-                if (!lastInfoPackages.isNullOrEmpty() && !preparations.isNullOrEmpty())
+                if (!lastInfoPackages.isNullOrEmpty() && !preparations.isNullOrEmpty()) {
                     initRecyclerView(it, position)
+                }
             }
         }
 
@@ -91,16 +95,29 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
             recyclerView.adapter = preparations?.let { MedicationsAdapter(it, this) }
         else
             recyclerView.adapter = lastInfoPackages?.let { LastInfoPackageAdapter(it, this) }
+
+        if (currentPosition != 0) {
+            (recyclerView.layoutManager as LinearLayoutManager).scrollToPosition(
+                currentPosition
+            )
+        }
     }
 
 
-    override fun onItemClick(clickLIP: LastInfoPackage) {
-//        val myBottomSheet: CustomBottomSheetDialogFragment =
-//            CustomBottomSheetDialogFragment.newInstance(clickPlan)
-//        myBottomSheet.show(childFragmentManager, myBottomSheet.tag)
+    override fun onItemClick(preparatId: Int, jumpId: Int) {
+//        currentPosition =
+//            (curRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+        val bundle = Bundle()
+        bundle.putInt("medicationId", preparatId)
+        bundle.putInt("infoPackageId", jumpId)
+        navController.navigate(R.id.nav_info_package, bundle)
     }
 
     override fun onItemClick(medicationId: Int) {
+//        currentPosition =
+//            (curRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
         val bundle = Bundle()
         bundle.putInt("medicationId", medicationId)
         bundle.putInt("infoPackageId", 0)
@@ -126,7 +143,6 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
                         } else
                             response.body()!!.text?.let { showToast(it) }
                     }
-
                 }
             })
     }

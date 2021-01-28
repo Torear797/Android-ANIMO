@@ -15,7 +15,7 @@ class LastInfoPackageAdapter(
     RecyclerView.Adapter<LastInfoPackageAdapter.LastInfoPackageHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(clickLIP: LastInfoPackage)
+        fun onItemClick(preparatId: Int, jumpId: Int)
     }
 
     inner class LastInfoPackageHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -28,7 +28,12 @@ class LastInfoPackageAdapter(
 
         override fun onClick(v: View?) {
             if (adapterPosition != RecyclerView.NO_POSITION)
-                lastInfoPackages[getPositionKey(adapterPosition)]?.let { listener.onItemClick(it) }
+                lastInfoPackages[getPositionKey(adapterPosition)]?.let {
+                    listener.onItemClick(
+                        it.id_preparat,
+                        getPositionKey(adapterPosition)
+                    )
+                }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.animo.ru.models
 
-import com.animo.ru.models.answers.LoginAnswer
+import com.animo.ru.App
+import com.orhanobut.hawk.Hawk
 
 data class User(
     var id: Int? = null,
@@ -30,7 +31,7 @@ data class User(
         return regionsString
     }
 
-    fun getRoleString() :String{
+    fun getRoleString(): String {
         var resault = "";
 
         val iterator = role?.toList()?.iterator()
@@ -41,7 +42,7 @@ data class User(
             resault += role.description
         }
 
-        return resault;
+        return resault
     }
 
     fun setNewTokens(token: String?, exp: String?, refreshToken: String?, refreshExp: String?) {
@@ -49,5 +50,7 @@ data class User(
         this.exp = exp
         this.refreshToken = refreshToken
         this.refreshExp = refreshExp
+
+        Hawk.put("user", App.user)
     }
 }

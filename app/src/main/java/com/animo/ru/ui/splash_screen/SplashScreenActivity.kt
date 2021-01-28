@@ -63,13 +63,14 @@ class SplashScreenActivity : AppCompatActivity() {
                                         finish()
                                     } else {
                                         response.body()!!.text?.let { it -> showToast(it) }
-                                        startActivity(
-                                            Intent(
-                                                applicationContext,
-                                                LoginActivity::class.java
-                                            )
-                                        )
-                                        finish()
+                                        App.logout(applicationContext, this@SplashScreenActivity)
+//                                        startActivity(
+//                                            Intent(
+//                                                applicationContext,
+//                                                LoginActivity::class.java
+//                                            )
+//                                        )
+//                                        finish()
                                     }
                                 }
                             }

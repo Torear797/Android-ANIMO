@@ -1,19 +1,32 @@
 package com.animo.ru.ui.preparations.infoPackage
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.animo.ru.App
 import com.animo.ru.R
+import com.animo.ru.models.InfoPackage
+import com.animo.ru.models.answers.GetInfoPackageAnswer
+import com.animo.ru.utilities.SpacesItemDecoration
+import com.animo.ru.utilities.showToast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 private const val ARG_PARAM1 = "medicationId"
 private const val ARG_PARAM2 = "infoPackageId"
 
-class InfoPackageFragment : Fragment() {
+class InfoPackageFragment : Fragment(), InfoPackageAdapter.OnInfoPackageClickListener {
 
     private var medicationId: Int? = null
     private var infoPackageId: Int? = null
+    private var infoPackages: MutableMap<Int, InfoPackage>? = mutableMapOf()
+    private var recyclerView: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,19 +39,65 @@ class InfoPackageFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_info_package, container, false)
+    ): View {
+        val view: View = inflater.inflate(R.layout.recyclerview_layout, container, false)
+
+        recyclerView = view.findViewById(R.id.recyclerView)
+        initRecyclerView()
+
+        return view
     }
 
-    companion object {
+    override fun onStart() {
+        super.onStart()
+        getInfoPackages()
+    }
 
-        fun newInstance(param1: Int, param2: Int) =
-            InfoPackageFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_PARAM1, param1)
-                    putInt(ARG_PARAM2, param2)
-                }
-            }
+    private fun initRecyclerView() {
+        recyclerView!!.addItemDecoration(SpacesItemDecoration(10, 10))
+        recyclerView!!.itemAnimator = DefaultItemAnimator()
+        recyclerView!!.setHasFixedSize(true)
+        recyclerView!!.layoutManager =
+            LinearLayoutManager(recyclerView!!.context, LinearLayoutManager.VERTICAL, false)
+        recyclerView!!.adapter = infoPackages?.let { InfoPackageAdapter(it, this) }
+    }
+
+    private fun getInfoPackages() {
+        val rolId = App.user.role!!
+
+        App.mService.getInfoPackages(medicationId!!, App.user.token!!, App.user.id!!, rolId)
+            .enqueue(
+                object : Callback<GetInfoPackageAnswer> {
+                    override fun onFailure(call: Call<GetInfoPackageAnswer>, t: Throwable) {
+                        showToast(getString(R.string.error_server_lost))
+                    }
+
+                    override fun onResponse(
+                        call: Call<GetInfoPackageAnswer>,
+                        response: Response<GetInfoPackageAnswer>
+                    ) {
+                        if (response.isSuccessful && response.body() != null) {
+                            if (response.body()!!.status == 200.toShort()) {
+                                infoPackages = response.body()!!.packages
+                                (recyclerView!!.adapter as InfoPackageAdapter).update(infoPackages!!)
+
+                                if (infoPackageId != 0 && infoPackageId != null && recyclerView != null) {
+                                    val id =
+                                        (recyclerView!!.adapter as InfoPackageAdapter).getPositionForId(
+                                            infoPackageId!!
+                                        )
+                                    (recyclerView!!.layoutManager as LinearLayoutManager).scrollToPosition(
+                                        id
+                                    )
+                                }
+                            } else
+                                response.body()!!.text?.let { showToast(it) }
+                        }
+                    }
+                })
+    }
+
+    override fun onItemClick() {
+        showToast("Поделиться")
     }
 }

@@ -1,12 +1,12 @@
 package com.animo.ru.retrofit
 
+import com.animo.ru.models.Role
+import com.animo.ru.models.answers.GetInfoPackageAnswer
 import com.animo.ru.models.answers.LoginAnswer
 import com.animo.ru.models.answers.MedicationDataAnswer
 import com.animo.ru.models.answers.UserInfoAnswer
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface RetrofitServices {
     @FormUrlEncoded
@@ -40,4 +40,13 @@ interface RetrofitServices {
     fun getMedicationsData(
         @Field("token") token: String
     ): Call<MedicationDataAnswer>
+
+    @GET("preparatmanagement/infoPackages/{infoPackageId}")
+    fun getInfoPackages(
+        @Path("infoPackageId") id: Int,
+        @Query("token") token: String,
+        @Query("AUTH_ID") AUTH_ID: Int,
+        @Query("ROLES") ROLES: List<Role>
+//        @Field("ROLES") ROLES: Int
+    ): Call<GetInfoPackageAnswer>
 }
