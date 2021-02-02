@@ -47,6 +47,5 @@ interface RetrofitServices {
         @Query("token") token: String,
         @Query("AUTH_ID") AUTH_ID: Int,
         @Query("ROLES") ROLES: List<Role>
-//        @Field("ROLES") ROLES: Int
     ): Call<GetInfoPackageAnswer>
 }

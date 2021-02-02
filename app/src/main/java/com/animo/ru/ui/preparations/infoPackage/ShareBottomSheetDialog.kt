@@ -1,4 +1,4 @@
-package com.animo.ru.ui.currentVisits
+package com.animo.ru.ui.preparations.infoPackage
 
 import android.app.Activity
 import android.app.Dialog
@@ -7,31 +7,30 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.FrameLayout
 import androidx.core.view.ViewCompat
+import androidx.core.widget.addTextChangedListener
 import com.animo.ru.R
-import com.animo.ru.models.Plan
+import com.animo.ru.models.InfoPackage
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
-import java.text.SimpleDateFormat
-import java.util.*
 
 
-class CustomBottomSheetDialogFragment : BottomSheetDialogFragment() {
-    private var startTimeValue: String = ""
-    private var endTimeValue: String = ""
-    private val sdf = SimpleDateFormat("hh : mm : ss", Locale.getDefault())
-
+class ShareBottomSheetDialog : BottomSheetDialogFragment() {
 
     companion object {
-        fun newInstance(clickPlan: Plan): CustomBottomSheetDialogFragment {
-            val fragment = CustomBottomSheetDialogFragment()
+        fun newInstance(infoPackage: InfoPackage): ShareBottomSheetDialog {
+            val fragment = ShareBottomSheetDialog()
             val args = Bundle()
-            args.putSerializable("clickPlan", clickPlan)
+            args.putSerializable("infoPackage", infoPackage)
             fragment.arguments = args
             return fragment
         }
@@ -41,9 +40,36 @@ class CustomBottomSheetDialogFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_start_visit, container, false)
+    ): View {
+        val view: View = inflater.inflate(R.layout.fragment_share, container, false)
+
+        val COUNTRIES = arrayOf("Item 1", "Item 2", "Item 3", "Item 4")
+
+        val adapter = context?.let {
+            ArrayAdapter(
+                it,
+                R.layout.item_spinner,
+                COUNTRIES
+            )
+        }
+
+        val editTextFilledExposedDropdown: AutoCompleteTextView =
+            view.findViewById(R.id.filled_exposed_dropdown)
+        editTextFilledExposedDropdown.setAdapter(adapter)
+
+
+        val allTags = mutableListOf("Love", "Passion", "Peace", "Hello", "Test")
+        val currentTags = mutableListOf<String>()
+
+        val chipGroup: ChipGroup = view.findViewById(R.id.mainTagChipGroup)
+        val autoCompleteTextView: AutoCompleteTextView =
+            view.findViewById(R.id.mainTagAutoCompleteTextView)
+
+        loadTagsUi(autoCompleteTextView, chipGroup, currentTags, allTags)
+
+        return view
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -62,18 +88,16 @@ class CustomBottomSheetDialogFragment : BottomSheetDialogFragment() {
 //            }
 //        }
 
+
     }
 
-    override fun getTheme(): Int {
-        return R.style.CustomBottomSheetDialog;
-    }
+    override fun getTheme(): Int = R.style.CustomBottomSheetDialog;
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-
         (dialog as BottomSheetDialog).behavior.addBottomSheetCallback(object :
-            BottomSheetCallback() {
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                     //In the EXPANDED STATE apply a new MaterialShapeDrawable with rounded cornes
@@ -131,5 +155,83 @@ class CustomBottomSheetDialogFragment : BottomSheetDialogFragment() {
         newMaterialShapeDrawable.strokeWidth = currentMaterialShapeDrawable.strokeWidth
         newMaterialShapeDrawable.strokeColor = currentMaterialShapeDrawable.strokeColor
         return newMaterialShapeDrawable
+    }
+
+
+    private fun loadTagsUi(
+        autoCompleteTextView: AutoCompleteTextView,
+        chipGroup: ChipGroup,
+        currentTags: MutableList<String>,
+        allTags: List<String>
+    ) {
+
+        val adapter = context?.let {
+            ArrayAdapter(
+                it,
+                android.R.layout.simple_dropdown_item_1line,
+                allTags
+            )
+        }
+        autoCompleteTextView.setAdapter(adapter)
+
+        fun addTag(name: String) {
+            if (name.isNotEmpty() && !currentTags.contains(name) && allTags.contains(name)) {
+                addChipToGroup(name, chipGroup, currentTags)
+                currentTags.add(name)
+            }
+        }
+
+        // select from auto complete
+        autoCompleteTextView.setOnItemClickListener { adapterView, _, position, _ ->
+            autoCompleteTextView.text = null
+            val name = adapterView.getItemAtPosition(position) as String
+            addTag(name)
+        }
+
+        // done keyboard button is pressed
+        autoCompleteTextView.setOnEditorActionListener { textView, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val name = textView.text.toString()
+                textView.text = null
+                addTag(name)
+                return@setOnEditorActionListener true
+            }
+            false
+        }
+
+        // space or comma is detected
+        autoCompleteTextView.addTextChangedListener {
+            if (it != null && it.isEmpty()) {
+                return@addTextChangedListener
+            }
+
+            if (it?.last() == ',' || it?.last() == ' ') {
+                val name = it.substring(0, it.length - 1)
+                addTag(name)
+
+                autoCompleteTextView.text = null
+            }
+        }
+
+        // initialize
+        for (tag in currentTags) {
+            addChipToGroup(tag, chipGroup, currentTags)
+        }
+    }
+
+    private fun addChipToGroup(name: String, chipGroup: ChipGroup, items: MutableList<String>) {
+        val chip = Chip(context)
+        chip.text = name
+
+        chip.isClickable = true
+        chip.isCheckable = false
+        chip.isCloseIconVisible = true
+
+        chipGroup.addView(chip)
+
+        chip.setOnCloseIconClickListener {
+            chipGroup.removeView(chip)
+            items.remove(name)
+        }
     }
 }

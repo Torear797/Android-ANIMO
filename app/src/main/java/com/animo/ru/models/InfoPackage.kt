@@ -1,5 +1,7 @@
 package com.animo.ru.models
 
+import java.io.Serializable
+
 class InfoPackage (
     var name: String = "",
     var created: String = "",
@@ -11,4 +13,4 @@ class InfoPackage (
     var share_description: String = "",
     var displayNoActive: String = "",
     var alert_viber_class: String = ""
-)
+) : Serializable

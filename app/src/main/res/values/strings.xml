@@ -25,4 +25,6 @@
     <string name="infoPackageText">Информационные пакеты</string>
     <string name="descriptionSharing">Кнопка шеринга</string>
     <string name="descArrow">arrow</string>
+    <string name="speciality">Специальность</string>
+    <string name="choceDoctor">Доктор</string>
 </resources>

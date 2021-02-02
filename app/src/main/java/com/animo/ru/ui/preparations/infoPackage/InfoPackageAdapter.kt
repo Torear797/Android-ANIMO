@@ -20,7 +20,7 @@ class InfoPackageAdapter(
 ) : RecyclerView.Adapter<InfoPackageAdapter.InfoPackageHolder>() {
 
     interface OnInfoPackageClickListener {
-        fun onItemClick()
+        fun onItemClick(infoPackage: InfoPackage)
     }
 
     inner class InfoPackageHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -52,7 +52,7 @@ class InfoPackageAdapter(
 
         override fun onClick(v: View?) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                infoPackages[getPositionKey(adapterPosition)]?.let { listener.onItemClick() }
+                infoPackages[getPositionKey(adapterPosition)]?.let { listener.onItemClick(it) }
             }
         }
     }

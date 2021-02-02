@@ -12,6 +12,7 @@ import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.InfoPackage
 import com.animo.ru.models.answers.GetInfoPackageAnswer
+import com.animo.ru.ui.currentVisits.CustomBottomSheetDialogFragment
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.showToast
 import retrofit2.Call
@@ -97,7 +98,10 @@ class InfoPackageFragment : Fragment(), InfoPackageAdapter.OnInfoPackageClickLis
                 })
     }
 
-    override fun onItemClick() {
-        showToast("Поделиться")
+    override fun onItemClick(infoPackage: InfoPackage) {
+        val myBottomSheet: ShareBottomSheetDialog =
+            ShareBottomSheetDialog.newInstance(infoPackage)
+
+        myBottomSheet.show(childFragmentManager, myBottomSheet.tag)
     }
 }
