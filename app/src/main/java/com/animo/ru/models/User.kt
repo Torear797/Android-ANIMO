@@ -5,19 +5,19 @@ import com.orhanobut.hawk.Hawk
 
 data class User(
     var id: Int? = null,
-    var first_name: String? = null,
-    var surname: String? = null,
-    var patronymic: String? = null,
-    var phone: String? = null,
-    var email: String? = null,
+    var first_name: String? = "",
+    var surname: String? = "",
+    var patronymic: String? = "",
+    var phone: String? = "",
+    var email: String? = "",
     var direction: Direction? = null,
     var role: List<Role>? = null,
     var regions: MutableMap<Int, String>? = null,
-    var create_date: String? = null,
-    var token: String? = null,
-    var exp: String? = null,
-    var refreshToken: String? = null,
-    var refreshExp: String? = null
+    var create_date: String? = "",
+    var token: String? = "",
+    var exp: String? = "",
+    var refreshToken: String? = "",
+    var refreshExp: String? = ""
 ) {
     fun getInitials(): String =
         (first_name?.get(0) ?: "0").toString() + (surname?.get(0) ?: "0").toString()
@@ -52,5 +52,25 @@ data class User(
         this.refreshExp = refreshExp
 
         Hawk.put("user", App.user)
+    }
+
+    fun getRolesIds(): List<Int> {
+        val arrayRoles: MutableList<Int> = mutableListOf()
+
+        role?.forEach {
+            it.id?.let { it1 -> arrayRoles.add(it1) }
+        }
+
+        return arrayRoles
+    }
+
+    fun getRolesArrayName(): List<String> {
+        val arrayRoles: MutableList<String> = mutableListOf()
+
+        role?.forEach {
+            it.name?.let { it1 -> arrayRoles.add(it1) }
+        }
+
+        return arrayRoles
     }
 }

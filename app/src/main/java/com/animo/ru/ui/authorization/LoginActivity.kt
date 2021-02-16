@@ -2,18 +2,22 @@ package com.animo.ru.ui.authorization
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Display
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.animo.ru.App
+import com.animo.ru.App.Companion.deviceInfo
 import com.animo.ru.App.Companion.mService
 import com.animo.ru.R
+import com.animo.ru.models.DeviceInfo
 import com.animo.ru.models.User
 import com.animo.ru.models.answers.LoginAnswer
 import com.animo.ru.models.answers.UserInfoAnswer
@@ -27,9 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class LoginActivity : AppCompatActivity() {
-    private var deviceId = ""
     private lateinit var username: TextInputEditText
     private lateinit var password: TextInputEditText
     private lateinit var pass: TextInputLayout
@@ -54,11 +56,17 @@ class LoginActivity : AppCompatActivity() {
             title = baseContext.resources.getString(R.string.login_title)
         }
 
-        deviceId =
-            Settings.Secure.getString(
-                applicationContext.contentResolver,
+        /*Заполнение информации об устройтсве пользователя*/
+        val display: Display = this.windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+
+        deviceInfo = DeviceInfo(
+            size, Settings.Secure.getString(
+                this.contentResolver,
                 Settings.Secure.ANDROID_ID
             )
+        )
     }
 
     override fun onStart() {
@@ -100,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
         mService.login(
             username.text.toString(),
             password.text.toString(),
-            deviceId,
+            deviceInfo.deviceId,
             true,
             Build.MANUFACTURER + " " + Build.MODEL,
             "Android"
@@ -170,6 +178,8 @@ class LoginActivity : AppCompatActivity() {
                             )
 
                             Hawk.put("user", App.user)
+                            Hawk.put("deviceInfo", deviceInfo)
+
                             startActivity(Intent(applicationContext, MenuActivity::class.java))
                             finish()
                         } else

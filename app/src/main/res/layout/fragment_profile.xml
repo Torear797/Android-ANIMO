@@ -52,7 +52,7 @@
                     android:layout_marginEnd="1dp"
                     android:layout_marginBottom="85dp"
                     android:gravity="center"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:textSize="32sp"
                     tool:text="AA" />
 
@@ -66,7 +66,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15sp"
                 android:fontFamily="sans-serif-light"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="32sp"
                 tool:text="Joey Tribbiani" />
 
@@ -96,7 +96,7 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:textAllCaps="true"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/fio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="7dp"
+        android:minHeight="30dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ic_copy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="fio" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ic_copy"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:adjustViewBounds="true"
+        android:background="@color/copyBackground"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ic_email"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/rectangle_rounded_all"
+        app:srcCompat="@drawable/ic_baseline_content_copy_18"
+        app:tint="@android:color/white" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ic_email"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:background="@color/EmailBackground"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ic_viber"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/rectangle_rounded_all"
+        app:srcCompat="@drawable/ic_baseline_alternate_email_18"
+        app:tint="@android:color/white" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ic_viber"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:background="@color/viberBackground"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ic_whatsapp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/rectangle_rounded_all"
+        app:srcCompat="@drawable/viber_icon_18"
+        app:tint="@android:color/white" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ic_whatsapp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:background="@color/WhatsAppBackground"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ic_telegram"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/rectangle_rounded_all"
+        app:srcCompat="@drawable/ic_whatsapp_18"
+        app:tint="@android:color/white" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ic_telegram"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:background="@color/TelegramBackground"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/rectangle_rounded_all"
+        app:srcCompat="@drawable/ic_telegram_18"
+        app:tint="@android:color/white" />
+</androidx.constraintlayout.widget.ConstraintLayout>

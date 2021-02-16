@@ -36,7 +36,7 @@
         android:id="@+id/nav_preparations"
         android:name="com.animo.ru.ui.preparations.PreparationsFragment"
         android:label="@string/preparations_text"
-        tools:layout="@layout/fragment_preparations" >
+        tools:layout="@layout/fragment_preparations">
         <action
             android:id="@+id/action_nav_preparations_to_nav_info_package"
             app:destination="@id/nav_info_package" />
@@ -46,5 +46,11 @@
         android:id="@+id/nav_info_package"
         android:name="com.animo.ru.ui.preparations.infoPackage.InfoPackageFragment"
         android:label="@string/infoPackageText"
-        tools:layout="@layout/fragment_info_package" />
+        tools:layout="@layout/recyclerview_layout" />
+
+    <fragment
+        android:id="@+id/nav_events"
+        android:name="com.animo.ru.ui.events.EventsFragment"
+        android:label="@string/menu_events"
+        tools:layout="@layout/recyclerview_layout" />
 </navigation>

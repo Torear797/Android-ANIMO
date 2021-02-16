@@ -12,7 +12,7 @@ import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.InfoPackage
 import com.animo.ru.models.answers.GetInfoPackageAnswer
-import com.animo.ru.ui.currentVisits.CustomBottomSheetDialogFragment
+import com.animo.ru.ui.share.ShareBottomSheetDialog
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.showToast
 import retrofit2.Call
@@ -64,9 +64,7 @@ class InfoPackageFragment : Fragment(), InfoPackageAdapter.OnInfoPackageClickLis
     }
 
     private fun getInfoPackages() {
-        val rolId = App.user.role!!
-
-        App.mService.getInfoPackages(medicationId!!, App.user.token!!, App.user.id!!, rolId)
+        App.mService.getInfoPackages(medicationId!!, App.user.token!!, App.user.getRolesArrayName())
             .enqueue(
                 object : Callback<GetInfoPackageAnswer> {
                     override fun onFailure(call: Call<GetInfoPackageAnswer>, t: Throwable) {
@@ -98,9 +96,14 @@ class InfoPackageFragment : Fragment(), InfoPackageAdapter.OnInfoPackageClickLis
                 })
     }
 
-    override fun onItemClick(infoPackage: InfoPackage) {
+    override fun onItemClick(infoPackage: InfoPackage, id: Int) {
         val myBottomSheet: ShareBottomSheetDialog =
-            ShareBottomSheetDialog.newInstance(infoPackage)
+            ShareBottomSheetDialog.newInstance(
+                id,
+                infoPackage.share_title,
+                infoPackage.share_description,
+                "info_package"
+            )
 
         myBottomSheet.show(childFragmentManager, myBottomSheet.tag)
     }

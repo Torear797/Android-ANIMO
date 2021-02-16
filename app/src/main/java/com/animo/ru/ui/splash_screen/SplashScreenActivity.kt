@@ -6,10 +6,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.animo.ru.App
 import com.animo.ru.R
+import com.animo.ru.models.DeviceInfo
 import com.animo.ru.models.User
 import com.animo.ru.models.answers.LoginAnswer
 import com.animo.ru.ui.authorization.LoginActivity
 import com.animo.ru.ui.menu.MenuActivity
+import com.animo.ru.utilities.isOnline
 import com.animo.ru.utilities.showToast
 import com.orhanobut.hawk.Hawk
 import retrofit2.Call
@@ -24,7 +26,19 @@ class SplashScreenActivity : AppCompatActivity() {
         val saveUser = Hawk.get<User>("user", null)
         if (saveUser != null) {
             App.user = saveUser
-            sendReLoginRequest()
+
+            val saveDeviceInfo = Hawk.get<DeviceInfo>("deviceInfo", null)
+            if (saveDeviceInfo != null) {
+                App.deviceInfo = saveDeviceInfo
+            }
+
+            if (!isOnline(this)) {
+                startActivity(Intent(this, MenuActivity::class.java))
+                finish()
+            } else {
+                sendReLoginRequest()
+            }
+
         } else {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()

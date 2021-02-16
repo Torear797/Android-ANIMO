@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <color name="colorPrimary">#49BEFF</color>
     <color name="colorPrimaryDark">#65DCE5</color>
     <color name="colorAccent">#0D5D98</color>
-
-
     <color name="field_inactive">#e9ecef</color>
     <color name="colorBackground">#f3f5f7</color>
-    <color name="white">#FFFFFF</color>
 
 <!--    Profile-->
     <color name="gradEnd">#67EFC8</color>
@@ -18,4 +14,12 @@
     <color name="direction_bg">#49BEFF</color>
     <color name="grey">#E5E5E5</color>
     <color name="headings">#3797CF</color>
+
+    <color name="copyBackground">#F57F17</color>
+    <color name="EmailBackground">#B71C1C</color>
+    <color name="viberBackground">#8F5DB7</color>
+    <color name="WhatsAppBackground">#43D854</color>
+    <color name="TelegramBackground">#0088CC</color>
+
+    <color name="field">#f4f7f9</color>
 </resources>

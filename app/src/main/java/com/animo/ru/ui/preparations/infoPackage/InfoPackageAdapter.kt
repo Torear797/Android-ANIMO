@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.InfoPackage
 
@@ -20,7 +20,7 @@ class InfoPackageAdapter(
 ) : RecyclerView.Adapter<InfoPackageAdapter.InfoPackageHolder>() {
 
     interface OnInfoPackageClickListener {
-        fun onItemClick(infoPackage: InfoPackage)
+        fun onItemClick(infoPackage: InfoPackage, id: Int)
     }
 
     inner class InfoPackageHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -30,6 +30,7 @@ class InfoPackageAdapter(
         var infoPackageType: TextView = itemView.findViewById(R.id.ip_type_package)
         var infoPackageSpec: TextView = itemView.findViewById(R.id.ip_spec)
         var infoPackageMed: TextView = itemView.findViewById(R.id.ip_med)
+        var infoPackageDesc: TextView = itemView.findViewById(R.id.ip_desc)
 
         var btnShare: ImageButton = itemView.findViewById(R.id.ip_btn_share)
         var btnArrow: ImageView = itemView.findViewById(R.id.ip_arrow)
@@ -52,7 +53,12 @@ class InfoPackageAdapter(
 
         override fun onClick(v: View?) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                infoPackages[getPositionKey(adapterPosition)]?.let { listener.onItemClick(it) }
+                infoPackages[getPositionKey(adapterPosition)]?.let {
+                    listener.onItemClick(
+                        it,
+                        getPositionKey(adapterPosition)
+                    )
+                }
             }
         }
     }
@@ -67,6 +73,12 @@ class InfoPackageAdapter(
     override fun onBindViewHolder(holder: InfoPackageHolder, position: Int) {
         val infoPackage = infoPackages[getPositionKey(position)]
         holder.infoPackageName.text = infoPackage!!.name
+
+        infoPackage.share_description = infoPackage.share_description.replace(
+            "[Имя ваше]",
+            App.user.first_name!!,
+            true
+        )
 
         holder.infoPackageText.text =
             HtmlCompat.fromHtml(
@@ -88,6 +100,13 @@ class InfoPackageAdapter(
 
         holder.infoPackageMed.text = HtmlCompat.fromHtml(
             "<strong>Информационный пакет рекомендован для препаратов:</strong> " + infoPackage.preparats,
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
+
+
+        val description = infoPackage.description
+        holder.infoPackageDesc.text = HtmlCompat.fromHtml(
+            "<strong>Примечание:</strong> " + if (description != null && description.isNotEmpty()) description else "Пусто",
             HtmlCompat.FROM_HTML_MODE_LEGACY
         )
     }

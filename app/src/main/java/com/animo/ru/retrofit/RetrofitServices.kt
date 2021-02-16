@@ -1,10 +1,6 @@
 package com.animo.ru.retrofit
 
-import com.animo.ru.models.Role
-import com.animo.ru.models.answers.GetInfoPackageAnswer
-import com.animo.ru.models.answers.LoginAnswer
-import com.animo.ru.models.answers.MedicationDataAnswer
-import com.animo.ru.models.answers.UserInfoAnswer
+import com.animo.ru.models.answers.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -30,7 +26,7 @@ interface RetrofitServices {
     ): Call<LoginAnswer>
 
     @FormUrlEncoded
-    @POST("User/info")
+    @POST("MobileApi/UserInfo")
     fun getUserInfo(
         @Field("token") token: String
     ): Call<UserInfoAnswer>
@@ -45,7 +41,41 @@ interface RetrofitServices {
     fun getInfoPackages(
         @Path("infoPackageId") id: Int,
         @Query("token") token: String,
-        @Query("AUTH_ID") AUTH_ID: Int,
-        @Query("ROLES") ROLES: List<Role>
+        @Query("ROLES[]") ROLES: List<String>
     ): Call<GetInfoPackageAnswer>
+
+    @FormUrlEncoded
+    @POST("MobileApi/getSpecAndReg")
+    fun getSpecAndReg(
+        @Field("token") token: String
+    ): Call<GetSpecAndRegAnswer>
+
+    @FormUrlEncoded
+    @POST("preparatmanagement/getDoctorsFromRegionAndSpec")
+    fun getDoctorsFromRegionAndSpec(
+        @Field("token") token: String,
+        @Field("idObject") idObject: Int,
+        @Field("mpIds") mpIds: Int,
+        @Field("specIds[]") specIds: ArrayList<Int>
+    ): Call<GetDoctorsFromSpecAndReg>
+
+    @FormUrlEncoded
+    @POST("Sharing/sendTrackingInfo")
+    fun sendTrackingInfo(
+        @Field("token") token: String,
+        @Field("typeBtn") typeBtn: String,
+        @Field("typeDevice") typeDevice: String,
+        @Field("idObject") idObject: Int,
+        @Field("typeObject") typeObject: String,
+        @Field("idDoctor") idDoctor: Int,
+        @Field("screenResolution") screenResolution: String,
+        @Field("deviceInfo") deviceInfo: String,
+    ): Call<BaseAnswer>
+
+    @FormUrlEncoded
+    @POST("Events/listEvents")
+    fun getEvents(
+        @Field("token") token: String,
+        @Field("ROLES[]") ROLES: List<String>
+    ): Call<GetEventsAnswer>
 }

@@ -42,7 +42,8 @@ class MenuActivity : AppCompatActivity() {
                 R.id.nav_cur_visits,
                 R.id.nav_profile,
                 R.id.nav_logout,
-                R.id.nav_preparations
+                R.id.nav_preparations,
+                R.id.nav_events
             ), drawerLayout
         )
 

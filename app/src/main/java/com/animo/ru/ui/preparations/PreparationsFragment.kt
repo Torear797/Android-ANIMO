@@ -10,9 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.animo.ru.App
+import com.animo.ru.App.Companion.accessRegions
+import com.animo.ru.App.Companion.accessSpeciality
+import com.animo.ru.App.Companion.sendGetSpecialityAndRegions
 import com.animo.ru.R
 import com.animo.ru.models.LastInfoPackage
 import com.animo.ru.models.Medication
+import com.animo.ru.models.answers.GetSpecAndRegAnswer
 import com.animo.ru.models.answers.MedicationDataAnswer
 import com.animo.ru.ui.menu.MenuActivity.Companion.navController
 import com.animo.ru.utilities.SpacesItemDecoration
@@ -28,9 +32,13 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
     private var lastInfoPackages: MutableMap<Int, LastInfoPackage>? = null
     private var preparations: MutableMap<Int, Medication>? = null
     private val mFragmentTitleList = listOf("Последние инфопакеты", "Препараты")
-    private var currentPosition = 0
+
+    private var currentPositionLastPackage = 0
+    private var currentPositionPreparations = 0
 
     private lateinit var viewpager: ViewPager2
+    private lateinit var curRecyclerViewLastPreparations: RecyclerView
+    private lateinit var curRecyclerViewMedications: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +64,10 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
         super.onStart()
         if (preparations == null && lastInfoPackages == null) {
             sendGetMedicationsDataRequest()
+        }
+
+        if(accessRegions == null || accessSpeciality == null){
+            sendGetSpecialityAndRegions()
         }
     }
 
@@ -91,22 +103,27 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.layoutManager =
             LinearLayoutManager(recyclerView.context, LinearLayoutManager.VERTICAL, false)
-        if (position == 1)
-            recyclerView.adapter = preparations?.let { MedicationsAdapter(it, this) }
-        else
-            recyclerView.adapter = lastInfoPackages?.let { LastInfoPackageAdapter(it, this) }
 
-        if (currentPosition != 0) {
+        if (position == 1) {
+            recyclerView.adapter = preparations?.let { MedicationsAdapter(it, this) }
             (recyclerView.layoutManager as LinearLayoutManager).scrollToPosition(
-                currentPosition
+                currentPositionPreparations
             )
+            curRecyclerViewMedications = recyclerView
+
+        } else {
+            recyclerView.adapter = lastInfoPackages?.let { LastInfoPackageAdapter(it, this) }
+            (recyclerView.layoutManager as LinearLayoutManager).scrollToPosition(
+                currentPositionLastPackage
+            )
+            curRecyclerViewLastPreparations = recyclerView
         }
     }
 
 
     override fun onItemClick(preparatId: Int, jumpId: Int) {
-//        currentPosition =
-//            (curRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        currentPositionLastPackage =
+            (curRecyclerViewLastPreparations.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
         val bundle = Bundle()
         bundle.putInt("medicationId", preparatId)
@@ -115,8 +132,8 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
     }
 
     override fun onItemClick(medicationId: Int) {
-//        currentPosition =
-//            (curRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        currentPositionPreparations =
+            (curRecyclerViewMedications.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
         val bundle = Bundle()
         bundle.putInt("medicationId", medicationId)
