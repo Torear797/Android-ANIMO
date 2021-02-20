@@ -1,6 +1,5 @@
 package com.animo.ru.ui.share
 
-import android.app.Dialog
 import android.content.*
 import android.net.Uri
 import android.os.Bundle
@@ -12,10 +11,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import androidx.core.view.ViewCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.App
 import com.animo.ru.App.Companion.accessSpeciality
@@ -27,13 +26,9 @@ import com.animo.ru.models.answers.ShareDoctor
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.isAppAvailable
 import com.animo.ru.utilities.showToast
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,7 +52,12 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
     private var chipGroup: ChipGroup? = null
 
     companion object {
-        fun newInstance(id: Int, title: String, text: String, typeObj: String): ShareBottomSheetDialog {
+        fun newInstance(
+            id: Int,
+            title: String,
+            text: String,
+            typeObj: String
+        ): ShareBottomSheetDialog {
             val fragment = ShareBottomSheetDialog()
             val args = Bundle()
             args.putSerializable("title", title)
@@ -93,9 +93,9 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
 
         titleText = view.findViewById(R.id.share_title)
 
-
         return view
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -105,46 +105,6 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
         typeObject = arguments?.getString("typeObject") as String
 
         titleText!!.text = sendTitle
-    }
-
-    override fun getTheme(): Int = R.style.CustomBottomSheetDialog
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-
-        (dialog as BottomSheetDialog).behavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    val newMaterialShapeDrawable: MaterialShapeDrawable =
-                        createMaterialShapeDrawable(bottomSheet)
-                    ViewCompat.setBackground(bottomSheet, newMaterialShapeDrawable)
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-        })
-
-        return dialog
-    }
-
-    private fun createMaterialShapeDrawable(bottomSheet: View): MaterialShapeDrawable {
-        val shapeAppearanceModel =
-            //Create a ShapeAppearanceModel with the same shapeAppearanceOverlay used in the style
-            ShapeAppearanceModel.builder(context, 0, R.style.CustomShapeAppearanceBottomSheetDialog)
-                .build()
-
-        //Create a new MaterialShapeDrawable (you can't use the original MaterialShapeDrawable in the BottoSheet)
-        val currentMaterialShapeDrawable = bottomSheet.background as MaterialShapeDrawable
-        val newMaterialShapeDrawable = MaterialShapeDrawable(shapeAppearanceModel)
-        //Copy the attributes in the new MaterialShapeDrawable
-        newMaterialShapeDrawable.initializeElevationOverlay(context)
-        newMaterialShapeDrawable.fillColor = currentMaterialShapeDrawable.fillColor
-        newMaterialShapeDrawable.tintList = currentMaterialShapeDrawable.tintList
-        newMaterialShapeDrawable.elevation = currentMaterialShapeDrawable.elevation
-        newMaterialShapeDrawable.strokeWidth = currentMaterialShapeDrawable.strokeWidth
-        newMaterialShapeDrawable.strokeColor = currentMaterialShapeDrawable.strokeColor
-        return newMaterialShapeDrawable
     }
 
     private fun loadTagsUi(
@@ -305,6 +265,9 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
             GridLayoutManager.VERTICAL,
             false
         )
+
+//        recyclerView.layoutManager =
+//            LinearLayoutManager(recyclerView.context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = shareMessengersList?.let { ShareMessengerAdapter(it, this) }
     }
 

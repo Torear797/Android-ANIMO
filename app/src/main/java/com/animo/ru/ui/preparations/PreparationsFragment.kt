@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +19,7 @@ import com.animo.ru.App.Companion.sendGetSpecialityAndRegions
 import com.animo.ru.R
 import com.animo.ru.models.LastInfoPackage
 import com.animo.ru.models.Medication
-import com.animo.ru.models.answers.GetSpecAndRegAnswer
 import com.animo.ru.models.answers.MedicationDataAnswer
-import com.animo.ru.ui.menu.MenuActivity.Companion.navController
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.showToast
 import com.google.android.material.tabs.TabLayout
@@ -40,11 +41,15 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
     private lateinit var curRecyclerViewLastPreparations: RecyclerView
     private lateinit var curRecyclerViewMedications: RecyclerView
 
+    private var navController: NavController? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_preparations, container, false)
+
+        navController = findNavController()
 
         viewpager = view.findViewById(R.id.viewpager)
         val tabLayout: TabLayout = view.findViewById(R.id.prep_tab_layout)
@@ -66,7 +71,7 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
             sendGetMedicationsDataRequest()
         }
 
-        if(accessRegions == null || accessSpeciality == null){
+        if (accessRegions == null || accessSpeciality == null) {
             sendGetSpecialityAndRegions()
         }
     }
@@ -128,7 +133,7 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
         val bundle = Bundle()
         bundle.putInt("medicationId", preparatId)
         bundle.putInt("infoPackageId", jumpId)
-        navController.navigate(R.id.nav_info_package, bundle)
+        navController?.navigate(R.id.nav_info_package, bundle)
     }
 
     override fun onItemClick(medicationId: Int) {
@@ -138,7 +143,7 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
         val bundle = Bundle()
         bundle.putInt("medicationId", medicationId)
         bundle.putInt("infoPackageId", 0)
-        navController.navigate(R.id.nav_info_package, bundle)
+        navController?.navigate(R.id.nav_info_package, bundle)
     }
 
     private fun sendGetMedicationsDataRequest() {

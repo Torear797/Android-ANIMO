@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,6 @@ import com.animo.ru.App.Companion.sendGetSpecialityAndRegions
 import com.animo.ru.R
 import com.animo.ru.models.Event
 import com.animo.ru.models.answers.GetEventsAnswer
-import com.animo.ru.models.answers.GetSpecAndRegAnswer
 import com.animo.ru.ui.share.ShareBottomSheetDialog
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.showToast
@@ -32,6 +32,12 @@ class EventsFragment : Fragment(), EventsAdapter.OnEventsClickListener {
         val view: View = inflater.inflate(R.layout.recyclerview_layout, container, false)
 
         recyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView!!.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.GreyBackground
+            )
+        )
         initRecyclerView()
 
         return view
@@ -41,7 +47,7 @@ class EventsFragment : Fragment(), EventsAdapter.OnEventsClickListener {
         super.onStart()
         getEvents()
 
-        if(App.accessRegions == null || App.accessSpeciality == null){
+        if (App.accessRegions == null || App.accessSpeciality == null) {
             sendGetSpecialityAndRegions()
         }
     }

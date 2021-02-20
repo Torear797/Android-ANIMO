@@ -26,7 +26,11 @@
         android:id="@+id/nav_profile"
         android:name="com.animo.ru.ui.profile.ProfileFragment"
         android:label="@string/m_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_nav_profile_to_nav_change_password"
+            app:destination="@id/nav_change_password" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_logout"
@@ -53,4 +57,10 @@
         android:name="com.animo.ru.ui.events.EventsFragment"
         android:label="@string/menu_events"
         tools:layout="@layout/recyclerview_layout" />
+
+    <fragment
+        android:id="@+id/nav_change_password"
+        android:name="com.animo.ru.ui.change_password.ChangePasswordFragment"
+        android:label="@string/changePasswordText"
+        tools:layout="@layout/fragment_change_password" />
 </navigation>

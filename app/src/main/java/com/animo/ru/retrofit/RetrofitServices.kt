@@ -78,4 +78,13 @@ interface RetrofitServices {
         @Field("token") token: String,
         @Field("ROLES[]") ROLES: List<String>
     ): Call<GetEventsAnswer>
+
+    @FormUrlEncoded
+    @POST("MobileApi/changePassword")
+    fun changePassword(
+        @Field("token") token: String,
+        @Field("cur_password") cur_password: String,
+        @Field("new_password") new_password: String,
+        @Field("repeat_password") repeat_password: String
+    ): Call<BaseAnswer>
 }

@@ -28,4 +28,11 @@
     <string name="speciality">Специальность</string>
     <string name="choceDoctor">Доктор</string>
     <string name="menu_events">Мероприятия</string>
+    <string name="changePassText">Сменить пароль</string>
+    <string name="logoutText">Выход</string>
+    <string name="changePasswordText">Изменение пароля</string>
+    <string name="old_password">Текущий пароль</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="repeat_password">Повторите пароль</string>
+    <string name="change_password_btn">Сменить пароль</string>
 </resources>

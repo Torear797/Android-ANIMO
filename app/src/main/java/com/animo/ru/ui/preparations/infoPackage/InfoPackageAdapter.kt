@@ -43,10 +43,10 @@ class InfoPackageAdapter(
             btnArrow.setOnClickListener {
                 if (myGroup.visibility == View.VISIBLE) {
                     myGroup.visibility = View.GONE
-                    btnArrow.animate().rotation(360F)
+                    btnArrow.animate().rotation(0F)
                 } else {
                     myGroup.visibility = View.VISIBLE
-                    btnArrow.animate().rotation(180F)
+                    btnArrow.animate().rotation(-180F)
                 }
             }
         }
