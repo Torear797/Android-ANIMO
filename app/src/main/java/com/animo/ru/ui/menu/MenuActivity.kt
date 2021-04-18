@@ -63,8 +63,9 @@ class MenuActivity : AppCompatActivity() {
         val fio: TextView = header.findViewById(R.id.nav_header_fio)
         val role: TextView = header.findViewById(R.id.nav_header_role)
         val avatarText: TextView = header.findViewById(R.id.avatar_textView)
-        fio.text = "Здравствуйте, " + App.user.first_name
-        role.text = "Ваша Роль: ${App.user.getRoleString()}"
+        fio.text = String.format(resources.getString(R.string.hello_user_menu), App.user.first_name)
+        role.text =
+            String.format(resources.getString(R.string.user_role_menu), App.user.getRoleString())
         avatarText.text = App.user.getInitials()
     }
 

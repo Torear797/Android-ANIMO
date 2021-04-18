@@ -1,6 +1,6 @@
 package com.animo.ru.models.answers
 
  open class BaseAnswer(
-    var status: Short? = null,
-    var text: String? = null,
+    val status: Short? = null,
+    val text: String? = null,
 )

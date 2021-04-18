@@ -6,7 +6,7 @@ import retrofit2.http.*
 
 interface RetrofitServices {
     @FormUrlEncoded
-    @POST("User/loginSubmit")
+    @POST("Mobileapi/loginSubmit")
     fun login(
         @Field("login") login: String?,
         @Field("password") password: String?,
@@ -17,7 +17,7 @@ interface RetrofitServices {
     ): Call<LoginAnswer>
 
     @FormUrlEncoded
-    @POST("User/reLogin")
+    @POST("Mobileapi/reLogin")
     fun reLogin(
         @Field("token") token: String,
         @Field("refreshToken") refreshToken: String,
@@ -26,32 +26,31 @@ interface RetrofitServices {
     ): Call<LoginAnswer>
 
     @FormUrlEncoded
-    @POST("MobileApi/UserInfo")
+    @POST("Mobileapi/UserInfo")
     fun getUserInfo(
         @Field("token") token: String
     ): Call<UserInfoAnswer>
 
     @FormUrlEncoded
-    @POST("PreparatManagement/list")
+    @POST("Mobileapi/getMedicationsList")
     fun getMedicationsData(
         @Field("token") token: String
     ): Call<MedicationDataAnswer>
 
-    @GET("preparatmanagement/infoPackages/{infoPackageId}")
+    @GET("Mobileapi/infoPackages/{infoPackageId}")
     fun getInfoPackages(
         @Path("infoPackageId") id: Int,
-        @Query("token") token: String,
-        @Query("ROLES[]") ROLES: List<String>
+        @Query("token") token: String
     ): Call<GetInfoPackageAnswer>
 
     @FormUrlEncoded
-    @POST("MobileApi/getSpecAndReg")
+    @POST("Mobileapi/getSpecAndReg")
     fun getSpecAndReg(
         @Field("token") token: String
     ): Call<GetSpecAndRegAnswer>
 
     @FormUrlEncoded
-    @POST("preparatmanagement/getDoctorsFromRegionAndSpec")
+    @POST("Mobileapi/getDoctorsFromRegionAndSpec")
     fun getDoctorsFromRegionAndSpec(
         @Field("token") token: String,
         @Field("idObject") idObject: Int,
@@ -60,7 +59,7 @@ interface RetrofitServices {
     ): Call<GetDoctorsFromSpecAndReg>
 
     @FormUrlEncoded
-    @POST("Sharing/sendTrackingInfo")
+    @POST("Mobileapi/sendTrackingInfo")
     fun sendTrackingInfo(
         @Field("token") token: String,
         @Field("typeBtn") typeBtn: String,
@@ -73,14 +72,14 @@ interface RetrofitServices {
     ): Call<BaseAnswer>
 
     @FormUrlEncoded
-    @POST("Events/listEvents")
+    @POST("Mobileapi/listEvents")
     fun getEvents(
         @Field("token") token: String,
         @Field("ROLES[]") ROLES: List<String>
     ): Call<GetEventsAnswer>
 
     @FormUrlEncoded
-    @POST("MobileApi/changePassword")
+    @POST("Mobileapi/changePassword")
     fun changePassword(
         @Field("token") token: String,
         @Field("cur_password") cur_password: String,

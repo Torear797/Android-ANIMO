@@ -1,6 +1,6 @@
 package com.animo.ru.models
 
 class Medication (
-    var name: String = "",
-    var cntInfPack: Int = 0
+    val name: String = "",
+    val cntInfPack: Int = 0
 )

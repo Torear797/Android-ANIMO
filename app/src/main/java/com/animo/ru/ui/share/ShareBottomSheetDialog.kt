@@ -14,7 +14,6 @@ import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.App
 import com.animo.ru.App.Companion.accessSpeciality
@@ -116,7 +115,7 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
         val adapter = context?.let {
             ArrayAdapter(
                 it,
-                android.R.layout.simple_dropdown_item_1line,
+                android.R.layout.simple_spinner_dropdown_item,
                 allTags
             )
         }
@@ -208,13 +207,6 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
                 R.color.EmailBackground
             )
         )
-
-/*        val intentViber: Intent? =
-            requireContext().packageManager.getLaunchIntentForPackage("com.viber.voip")
-        val intentWhatsApp: Intent? =
-            requireContext().packageManager.getLaunchIntentForPackage("com.whatsapp")
-        val intentTelegram: Intent? =
-            requireContext().packageManager.getLaunchIntentForPackage("org.telegram.messenger")*/
 
         val isViberInstalled = isAppAvailable(requireContext(), "com.viber.voip")
         val isWhatsAppInstalled = isAppAvailable(requireContext(), "com.whatsapp")
@@ -363,7 +355,7 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
         recyclerView!!.visibility = INVISIBLE
     }
 
-    private fun sendShareTrackingInfo(typeBtn: String) {
+    private fun  sendShareTrackingInfo(typeBtn: String) {
         val selectedDoctor: ShareDoctor = doctorsList?.selectedItem as ShareDoctor
         val idDoc = getDoctorIdForValue(selectedDoctor.fio!!)
 
@@ -477,15 +469,15 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
     }
 
     private fun clearFields() {
-        currentTags = mutableListOf()
-        chipGroup?.removeAllViews()
+//        currentTags = mutableListOf()
+//        chipGroup?.removeAllViews()
         getDoctors()
 
-        accessSpeciality?.values?.toList()?.let {
-            loadTagsUi(
-                autoCompleteTextView!!, chipGroup!!,
-                it
-            )
-        }
+//        accessSpeciality?.values?.toList()?.let {
+//            loadTagsUi(
+//                autoCompleteTextView!!, chipGroup!!,
+//                it
+//            )
+//        }
     }
 }

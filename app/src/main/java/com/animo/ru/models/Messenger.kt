@@ -1,8 +1,8 @@
 package com.animo.ru.models
 
 class Messenger (
-    var id: Int = 0,
-    var appName: String = "",
-    var icon: Int = 0,
-    var backgroundColor: Int = 0
+    val id: Int = 0,
+    val appName: String = "",
+    val icon: Int = 0,
+    val backgroundColor: Int = 0
 )

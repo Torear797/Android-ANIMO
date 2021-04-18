@@ -4,6 +4,6 @@ import com.animo.ru.models.LastInfoPackage
 import com.animo.ru.models.Medication
 
 data class MedicationDataAnswer(
-    var arPreparations: MutableMap<Int, Medication>,
-    var arLastInfoPackage: MutableMap<Int, LastInfoPackage>
+    val arPreparations: MutableMap<Int, Medication>,
+    val arLastInfoPackage: MutableMap<Int, LastInfoPackage>
 ) : BaseAnswer()

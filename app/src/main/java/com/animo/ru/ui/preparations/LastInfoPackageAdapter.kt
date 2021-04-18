@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.R
 import com.animo.ru.models.LastInfoPackage
+import com.animo.ru.utilities.deleteListener
 
 class LastInfoPackageAdapter(
     private val lastInfoPackages: MutableMap<Int, LastInfoPackage>,
@@ -15,26 +16,32 @@ class LastInfoPackageAdapter(
     RecyclerView.Adapter<LastInfoPackageAdapter.LastInfoPackageHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(preparatId: Int, jumpId: Int)
+        fun onItemClick(medicationId: Int, jumpId: Int)
     }
 
-    inner class LastInfoPackageHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
-        var textInfoPackage: TextView = itemView.findViewById(R.id.lip_text)
+    inner class LastInfoPackageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val textInfoPackage: TextView = itemView.findViewById(R.id.lip_text)
 
-        init {
-            itemView.setOnClickListener(this)
+        fun bind(lastInfoPackage: LastInfoPackage) {
+            textInfoPackage.text = lastInfoPackage.pip_name
         }
+    }
 
-        override fun onClick(v: View?) {
-            if (adapterPosition != RecyclerView.NO_POSITION)
-                lastInfoPackages[getPositionKey(adapterPosition)]?.let {
+    override fun onViewAttachedToWindow(holder: LastInfoPackageHolder) {
+        holder.itemView.setOnClickListener {
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                lastInfoPackages[getPositionKey(holder.adapterPosition)]?.let {
                     listener.onItemClick(
                         it.id_preparat,
-                        getPositionKey(adapterPosition)
+                        getPositionKey(holder.adapterPosition)
                     )
                 }
+            }
         }
+    }
+
+    override fun onViewDetachedFromWindow(holder: LastInfoPackageHolder) {
+        deleteListener(holder.itemView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LastInfoPackageHolder {
@@ -46,7 +53,7 @@ class LastInfoPackageAdapter(
 
     override fun onBindViewHolder(holder: LastInfoPackageHolder, position: Int) {
         val lastInfoPackage = lastInfoPackages[getPositionKey(position)]
-        holder.textInfoPackage.text = lastInfoPackage!!.pip_name
+        lastInfoPackage?.let { holder.bind(it) }
     }
 
     override fun getItemCount(): Int = lastInfoPackages.size

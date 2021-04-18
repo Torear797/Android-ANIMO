@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.InfoPackage
-
+import com.animo.ru.utilities.deleteListener
 
 class InfoPackageAdapter(
     private var infoPackages: MutableMap<Int, InfoPackage>,
@@ -23,44 +23,87 @@ class InfoPackageAdapter(
         fun onItemClick(infoPackage: InfoPackage, id: Int)
     }
 
-    inner class InfoPackageHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
-        var infoPackageName: TextView = itemView.findViewById(R.id.ip_name)
-        var infoPackageText: TextView = itemView.findViewById(R.id.ip_text)
-        var infoPackageType: TextView = itemView.findViewById(R.id.ip_type_package)
-        var infoPackageSpec: TextView = itemView.findViewById(R.id.ip_spec)
-        var infoPackageMed: TextView = itemView.findViewById(R.id.ip_med)
-        var infoPackageDesc: TextView = itemView.findViewById(R.id.ip_desc)
+    inner class InfoPackageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val infoPackageName: TextView = itemView.findViewById(R.id.ip_name)
+        private val infoPackageText: TextView = itemView.findViewById(R.id.ip_text)
+        private val infoPackageType: TextView = itemView.findViewById(R.id.ip_type_package)
+        private val infoPackageSpec: TextView = itemView.findViewById(R.id.ip_spec)
+        private val infoPackageMed: TextView = itemView.findViewById(R.id.ip_med)
+        private val infoPackageDesc: TextView = itemView.findViewById(R.id.ip_desc)
 
-        var btnShare: ImageButton = itemView.findViewById(R.id.ip_btn_share)
-        var btnArrow: ImageView = itemView.findViewById(R.id.ip_arrow)
-        var myGroup: Group = itemView.findViewById(R.id.MyGroup)
+        val btnShare: ImageButton = itemView.findViewById(R.id.ip_btn_share)
+        val btnArrow: ImageView = itemView.findViewById(R.id.ip_arrow)
+        val myGroup: Group = itemView.findViewById(R.id.MyGroup)
 
-        init {
-            btnShare.setOnClickListener(this)
+        fun bind(infoPackage: InfoPackage) {
+            infoPackageName.text = infoPackage.name
+
+            infoPackage.share_description = infoPackage.share_description.replace(
+                "[Имя ваше]",
+                App.user.first_name!!,
+                true
+            )
+
+            infoPackageText.text =
+                HtmlCompat.fromHtml(
+                    "<strong>Текст:</strong> " + infoPackage.share_description,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY
+                )
+
+            infoPackageType.text =
+                HtmlCompat.fromHtml(
+                    "<strong>Тип пакета:</strong> " + infoPackage.oa_name,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY
+                )
+
+            infoPackageSpec.text =
+                HtmlCompat.fromHtml(
+                    "<strong>Информационный пакет рекомендован для специальностей:</strong> " + infoPackage.specialty,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY
+                )
+
+            infoPackageMed.text = HtmlCompat.fromHtml(
+                "<strong>Информационный пакет рекомендован для препаратов:</strong> " + infoPackage.preparats,
+                HtmlCompat.FROM_HTML_MODE_LEGACY
+            )
 
 
-            btnArrow.setOnClickListener {
-                if (myGroup.visibility == View.VISIBLE) {
-                    myGroup.visibility = View.GONE
-                    btnArrow.animate().rotation(0F)
-                } else {
-                    myGroup.visibility = View.VISIBLE
-                    btnArrow.animate().rotation(-180F)
-                }
-            }
+            val description = infoPackage.description
+            infoPackageDesc.text = HtmlCompat.fromHtml(
+                "<strong>Примечание:</strong> " + if (description != null && description.isNotEmpty()) description else "Пусто",
+                HtmlCompat.FROM_HTML_MODE_LEGACY
+            )
         }
+    }
 
-        override fun onClick(v: View?) {
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                infoPackages[getPositionKey(adapterPosition)]?.let {
+    override fun onViewAttachedToWindow(holder: InfoPackageHolder) {
+        holder.btnShare.setOnClickListener {
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                infoPackages[getPositionKey(holder.adapterPosition)]?.let {
                     listener.onItemClick(
                         it,
-                        getPositionKey(adapterPosition)
+                        getPositionKey(holder.adapterPosition)
                     )
                 }
             }
         }
+
+        holder.btnArrow.setOnClickListener {
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                if (holder.myGroup.visibility == View.VISIBLE) {
+                    holder.myGroup.visibility = View.GONE
+                    holder.btnArrow.animate().rotation(0F)
+                } else {
+                    holder.myGroup.visibility = View.VISIBLE
+                    holder.btnArrow.animate().rotation(-180F)
+                }
+            }
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: InfoPackageHolder) {
+        deleteListener(holder.btnShare)
+        deleteListener(holder.btnArrow)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InfoPackageHolder {
@@ -72,43 +115,7 @@ class InfoPackageAdapter(
 
     override fun onBindViewHolder(holder: InfoPackageHolder, position: Int) {
         val infoPackage = infoPackages[getPositionKey(position)]
-        holder.infoPackageName.text = infoPackage!!.name
-
-        infoPackage.share_description = infoPackage.share_description.replace(
-            "[Имя ваше]",
-            App.user.first_name!!,
-            true
-        )
-
-        holder.infoPackageText.text =
-            HtmlCompat.fromHtml(
-                "<strong>Текст:</strong> " + infoPackage.share_description,
-                HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
-
-        holder.infoPackageType.text =
-            HtmlCompat.fromHtml(
-                "<strong>Тип пакета:</strong> " + infoPackage.oa_name,
-                HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
-
-        holder.infoPackageSpec.text =
-            HtmlCompat.fromHtml(
-                "<strong>Информационный пакет рекомендован для специальностей:</strong> " + infoPackage.specialty,
-                HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
-
-        holder.infoPackageMed.text = HtmlCompat.fromHtml(
-            "<strong>Информационный пакет рекомендован для препаратов:</strong> " + infoPackage.preparats,
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
-
-
-        val description = infoPackage.description
-        holder.infoPackageDesc.text = HtmlCompat.fromHtml(
-            "<strong>Примечание:</strong> " + if (description != null && description.isNotEmpty()) description else "Пусто",
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
+        infoPackage?.let { holder.bind(it) }
     }
 
     override fun getItemCount(): Int = infoPackages.size

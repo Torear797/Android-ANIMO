@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.Event
+import com.animo.ru.utilities.deleteListener
 
 class EventsAdapter(
     private var Events: MutableMap<Int, Event>,
@@ -22,41 +23,41 @@ class EventsAdapter(
         fun onEventClick(event: Event, id: Int)
     }
 
-    inner class EventsHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
-        var infoPackageName: TextView = itemView.findViewById(R.id.ip_name)
-        var infoPackageText: TextView = itemView.findViewById(R.id.ip_text)
-        var infoPackageType: TextView = itemView.findViewById(R.id.ip_type_package)
-        var infoPackageMed: TextView = itemView.findViewById(R.id.ip_med)
+    inner class EventsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val infoPackageName: TextView = itemView.findViewById(R.id.ip_name)
+        private val infoPackageText: TextView = itemView.findViewById(R.id.ip_text)
+        private val infoPackageType: TextView = itemView.findViewById(R.id.ip_type_package)
+        private val infoPackageMed: TextView = itemView.findViewById(R.id.ip_med)
 
-        var btnShare: ImageButton = itemView.findViewById(R.id.ip_btn_share)
-        var btnArrow: ImageView = itemView.findViewById(R.id.ip_arrow)
-        var myGroup: Group = itemView.findViewById(R.id.MyGroup)
+        val btnShare: ImageButton = itemView.findViewById(R.id.ip_btn_share)
+        val btnArrow: ImageView = itemView.findViewById(R.id.ip_arrow)
+        val myGroup: Group = itemView.findViewById(R.id.MyGroup)
 
-        init {
-            btnShare.setOnClickListener(this)
+        fun bind(event: Event) {
+            infoPackageName.text = event.name
 
+            event.text = event.text.replace(
+                "[Имя ваше]",
+                App.user.first_name!!,
+                true
+            )
 
-            btnArrow.setOnClickListener {
-                if (myGroup.visibility == View.VISIBLE) {
-                    myGroup.visibility = View.GONE
-                    btnArrow.animate().rotation(0F)
-                } else {
-                    myGroup.visibility = View.VISIBLE
-                    btnArrow.animate().rotation(-180F)
-                }
-            }
-        }
+            infoPackageText.text =
+                HtmlCompat.fromHtml(
+                    "<strong>Текст:</strong> " + event.text,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY
+                )
 
-        override fun onClick(v: View?) {
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                Events[getPositionKey(adapterPosition)]?.let {
-                    listener.onEventClick(
-                        it,
-                        getPositionKey(adapterPosition)
-                    )
-                }
-            }
+            infoPackageType.text =
+                HtmlCompat.fromHtml(
+                    "<strong>Тип:</strong> " + event.oa_name,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY
+                )
+
+            infoPackageMed.text = HtmlCompat.fromHtml(
+                "<strong>Препараты:</strong> " + event.preparations,
+                HtmlCompat.FROM_HTML_MODE_LEGACY
+            )
         }
     }
 
@@ -67,33 +68,39 @@ class EventsAdapter(
         )
     }
 
+    override fun onViewAttachedToWindow(holder: EventsHolder) {
+        holder.btnShare.setOnClickListener {
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                Events[getPositionKey(holder.adapterPosition)]?.let {
+                    listener.onEventClick(
+                        it,
+                        getPositionKey(holder.adapterPosition)
+                    )
+                }
+            }
+        }
+
+        holder.btnArrow.setOnClickListener {
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                if (holder.myGroup.visibility == View.VISIBLE) {
+                    holder.myGroup.visibility = View.GONE
+                    holder.btnArrow.animate().rotation(0F)
+                } else {
+                    holder.myGroup.visibility = View.VISIBLE
+                    holder.btnArrow.animate().rotation(-180F)
+                }
+            }
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: EventsHolder) {
+        deleteListener(holder.btnShare)
+        deleteListener(holder.btnArrow)
+    }
+
     override fun onBindViewHolder(holder: EventsAdapter.EventsHolder, position: Int) {
         val event = Events[getPositionKey(position)]
-
-        holder.infoPackageName.text = event!!.name
-
-        event.text = event.text.replace(
-            "[Имя ваше]",
-            App.user.first_name!!,
-            true
-        )
-
-        holder.infoPackageText.text =
-            HtmlCompat.fromHtml(
-                "<strong>Текст:</strong> " + event.text,
-                HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
-
-        holder.infoPackageType.text =
-            HtmlCompat.fromHtml(
-                "<strong>Тип:</strong> " + event.oa_name,
-                HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
-
-        holder.infoPackageMed.text = HtmlCompat.fromHtml(
-            "<strong>Препараты:</strong> " + event.preparations,
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
+        event?.let { holder.bind(it) }
     }
 
     override fun getItemCount(): Int = Events.size
@@ -112,5 +119,4 @@ class EventsAdapter(
         Events = modelList
         notifyDataSetChanged()
     }
-
 }

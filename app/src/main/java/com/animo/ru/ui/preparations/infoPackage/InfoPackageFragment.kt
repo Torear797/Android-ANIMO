@@ -64,7 +64,7 @@ class InfoPackageFragment : Fragment(), InfoPackageAdapter.OnInfoPackageClickLis
     }
 
     private fun getInfoPackages() {
-        App.mService.getInfoPackages(medicationId!!, App.user.token!!, App.user.getRolesArrayName())
+        App.mService.getInfoPackages(medicationId!!, App.user.token!!)
             .enqueue(
                 object : Callback<GetInfoPackageAnswer> {
                     override fun onFailure(call: Call<GetInfoPackageAnswer>, t: Throwable) {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -48,5 +49,15 @@ fun isAppAvailable(context: Context, appName: String): Boolean {
         true
     } catch (e: PackageManager.NameNotFoundException) {
         false
+    }
+}
+
+fun deleteListener(view: View) {
+    if (view.hasOnClickListeners()) {
+        view.setOnClickListener(null)
+    }
+
+    if (view.onFocusChangeListener != null) {
+        view.onFocusChangeListener = null
     }
 }

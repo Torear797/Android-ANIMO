@@ -4,16 +4,16 @@ import com.animo.ru.App
 import com.orhanobut.hawk.Hawk
 
 data class User(
-    var id: Int? = null,
-    var first_name: String? = "",
-    var surname: String? = "",
-    var patronymic: String? = "",
-    var phone: String? = "",
-    var email: String? = "",
-    var direction: Direction? = null,
-    var role: List<Role>? = null,
-    var regions: MutableMap<Int, String>? = null,
-    var create_date: String? = "",
+    val id: Int? = null,
+    val first_name: String? = "",
+    val surname: String? = "",
+    val patronymic: String? = "",
+    val phone: String? = "",
+    val email: String? = "",
+    val direction: Direction? = null,
+    val role: List<Role>? = null,
+    val regions: MutableMap<Int, String>? = null,
+    val create_date: String? = "",
     var token: String? = "",
     var exp: String? = "",
     var refreshToken: String? = "",
@@ -32,7 +32,7 @@ data class User(
     }
 
     fun getRoleString(): String {
-        var resault = "";
+        var resault = ""
 
         val iterator = role?.toList()?.iterator()
 

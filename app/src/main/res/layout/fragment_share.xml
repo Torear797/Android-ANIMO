@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_dialog"
-    >
+    android:background="@drawable/rounded_dialog">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
@@ -13,6 +12,9 @@
         android:layout_height="wrap_content"
         app:behavior_hideable="false"
         app:behavior_peekHeight="100dp"
+        android:focusable="true"
+        android:theme="@style/ClearFocus"
+        android:focusableInTouchMode="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
@@ -49,25 +51,28 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputChip"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:hint="@string/speciality"
+            android:textColorHint="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/share_title">
 
             <AutoCompleteTextView
                 android:id="@+id/mainTagAutoCompleteTextView"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/field"
+                android:layout_gravity="center_vertical"
+                android:backgroundTint="@color/field"
                 android:completionThreshold="1"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
+                android:inputType="textAutoComplete"
+                android:lines="1"
+                android:singleLine="true"
                 tools:ignore="LabelFor" />
 
             <HorizontalScrollView
@@ -122,6 +127,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/separator" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

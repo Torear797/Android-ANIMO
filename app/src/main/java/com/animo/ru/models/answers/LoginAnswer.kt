@@ -1,9 +1,9 @@
 package com.animo.ru.models.answers
 
 data class LoginAnswer(
-    var token: String? = null,
-    var exp: String? = null,
-    var refreshToken: String? = null,
-    var refreshExp: String? = null,
-    var user_id: Int? = null
+    val token: String? = null,
+    val exp: String? = null,
+    val refreshToken: String? = null,
+    val refreshExp: String? = null,
+    val user_id: Int? = null
 ) : BaseAnswer()

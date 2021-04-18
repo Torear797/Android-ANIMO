@@ -1,7 +1,7 @@
 package com.animo.ru.models
 
 class Role (
-    var id: Int? = null,
-    var name: String? = null,
-    var description: String? = null
+    val id: Int? = null,
+    val name: String? = null,
+    val description: String? = null
 )

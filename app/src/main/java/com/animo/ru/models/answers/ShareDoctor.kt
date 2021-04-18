@@ -1,9 +1,9 @@
 package com.animo.ru.models.answers
 
 class ShareDoctor(
-    var fio: String? = "",
-    var io: String? = "",
-    var email: String? = "",
-    var phone: String? = "",
-    var sent: List<String>? = null
+    val fio: String? = "",
+    val io: String? = "",
+    val email: String? = "",
+    val phone: String? = "",
+    val sent: List<String>? = null
 )

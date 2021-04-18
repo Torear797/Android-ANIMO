@@ -4,7 +4,7 @@ import java.io.Serializable
 
 data class Plan (
     val id:Int = 0,
-    var data: String = "",
-    var user: String = "",
-    var description: String = "",
+    val data: String = "",
+    val user: String = "",
+    val description: String = "",
 ) : Serializable

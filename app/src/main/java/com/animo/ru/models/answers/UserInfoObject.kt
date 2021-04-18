@@ -4,13 +4,13 @@ import com.animo.ru.models.Direction
 import com.animo.ru.models.Role
 
 class UserInfoObject(
-    var first_name: String? = null,
-    var surname: String? = null,
-    var patronymic: String? = null,
-    var phone: String? = null,
-    var email: String? = null,
-    var direction: Direction? = null,
-    var role: List<Role>,
-    var regions: MutableMap<Int, String>? = null,
-    var create_date: String? = null
+    val first_name: String? = null,
+    val surname: String? = null,
+    val patronymic: String? = null,
+    val phone: String? = null,
+    val email: String? = null,
+    val direction: Direction? = null,
+    val role: List<Role>,
+    val regions: MutableMap<Int, String>? = null,
+    val create_date: String? = null
 )

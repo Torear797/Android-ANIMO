@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.R
+import com.animo.ru.models.LastInfoPackage
 import com.animo.ru.models.Medication
+import com.animo.ru.utilities.deleteListener
 
 class MedicationsAdapter(
     private val preparations: MutableMap<Int, Medication>,
@@ -18,18 +20,13 @@ class MedicationsAdapter(
         fun onItemClick(medicationId: Int)
     }
 
-    inner class MedicationHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
-        var medicationName: TextView = itemView.findViewById(R.id.med_name)
-        var medicationCount: TextView = itemView.findViewById(R.id.count)
+    inner class MedicationHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val medicationName: TextView = itemView.findViewById(R.id.med_name)
+        private val medicationCount: TextView = itemView.findViewById(R.id.count)
 
-        init {
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View?) {
-            if (adapterPosition != RecyclerView.NO_POSITION)
-                preparations[getPositionKey(adapterPosition)]?.let { listener.onItemClick(getPositionKey(adapterPosition)) }
+        fun bind(medication: Medication) {
+            medicationName.text = medication.name
+            medicationCount.text = medication.cntInfPack.toString()
         }
     }
 
@@ -42,8 +39,23 @@ class MedicationsAdapter(
 
     override fun onBindViewHolder(holder: MedicationHolder, position: Int) {
         val medication = preparations[getPositionKey(position)]
-        holder.medicationName.text = medication!!.name
-        holder.medicationCount.text = medication.cntInfPack.toString()
+        medication?.let { holder.bind(it) }
+    }
+
+    override fun onViewAttachedToWindow(holder: MedicationHolder) {
+        holder.itemView.setOnClickListener {
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                preparations[getPositionKey(holder.adapterPosition)]?.let {
+                    listener.onItemClick(
+                        getPositionKey(holder.adapterPosition)
+                    )
+                }
+            }
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: MedicationHolder) {
+        deleteListener(holder.itemView)
     }
 
     override fun getItemCount(): Int = preparations.size
