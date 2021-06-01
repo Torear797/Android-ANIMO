@@ -8,9 +8,11 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Display
+import android.util.DisplayMetrics
+import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.animo.ru.App
@@ -31,7 +33,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), TextView.OnEditorActionListener {
     private lateinit var username: TextInputEditText
     private lateinit var password: TextInputEditText
     private lateinit var pass: TextInputLayout
@@ -50,6 +52,11 @@ class LoginActivity : AppCompatActivity() {
         textInputLayoutLogin = findViewById(R.id.textInputLayoutLogin)
         loginBtn = findViewById(R.id.login_btn)
 
+        password.setImeActionLabel(
+            resources.getString(R.string.action_sign_in),
+            EditorInfo.IME_ACTION_GO
+        )
+
         setSupportActionBar(toolbar)
 
         supportActionBar?.apply {
@@ -57,9 +64,21 @@ class LoginActivity : AppCompatActivity() {
         }
 
         /*Заполнение информации об устройтсве пользователя*/
-        val display: Display = this.windowManager.defaultDisplay
         val size = Point()
-        display.getSize(size)
+        val outMetrics = DisplayMetrics()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val display = this.display
+            display?.getRealMetrics(outMetrics)
+        } else {
+            @Suppress("DEPRECATION")
+            val display = this.windowManager.defaultDisplay
+            @Suppress("DEPRECATION")
+            display.getMetrics(outMetrics)
+        }
+
+        size.x = outMetrics.widthPixels
+        size.y = outMetrics.heightPixels
 
         deviceInfo = DeviceInfo(
             size, Settings.Secure.getString(
@@ -147,7 +166,13 @@ class LoginActivity : AppCompatActivity() {
             })
     }
 
-    private fun sendGetUserInfoRequest(UserId: Int, Token: String, exp: String, refreshToken: String, refreshExp: String) {
+    private fun sendGetUserInfoRequest(
+        UserId: Int,
+        Token: String,
+        exp: String,
+        refreshToken: String,
+        refreshExp: String
+    ) {
         mService.getUserInfo(Token).enqueue(
             object : Callback<UserInfoAnswer> {
                 override fun onFailure(call: Call<UserInfoAnswer>, t: Throwable) {
@@ -246,4 +271,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun isValidate(): Boolean = validateUserName() && validatePassword()
+
+    override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        if (p1 == EditorInfo.IME_ACTION_SEND || p1 == R.id.password) {
+            login()
+            return true
+        }
+
+        return false
+    }
 }

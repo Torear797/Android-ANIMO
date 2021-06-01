@@ -31,10 +31,10 @@ class CurrentVisitsFragment : Fragment(), PlansAdapter.OnItemClickListener {
     }
 
     private fun addTestData() {
-        visits.add(Plan(1, "2020-10-30", "Бавыкина Варвара Александровна", "Пусто"))
-        visits.add(Plan(2, "2020-10-29", "Бавыкина Варвара Александровна", "Пусто"))
-        visits.add(Plan(3, "2020-10-28", "Бавыкина Варвара Александровна", "Пусто"))
-        visits.add(Plan(4, "2020-10-27", "Бавыкина Варвара Александровна", "Пусто"))
+//        visits.add(Plan(1, "2020-10-30", "Бавыкина Варвара Александровна", "Пусто"))
+//        visits.add(Plan(2, "2020-10-29", "Бавыкина Варвара Александровна", "Пусто"))
+//        visits.add(Plan(3, "2020-10-28", "Бавыкина Варвара Александровна", "Пусто"))
+//        visits.add(Plan(4, "2020-10-27", "Бавыкина Варвара Александровна", "Пусто"))
     }
 
     private fun initRecyclerView(visitsList: RecyclerView) {

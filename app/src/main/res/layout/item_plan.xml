@@ -1,50 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/plan"
+    android:id="@+id/swipeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    app:cardCornerRadius="2dp"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true">
+    android:clipToPadding="false">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/bottom_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/send"
+            style="@style/swipeItem"
+            android:background="#18D120"
+            android:src="@drawable/ic_baseline_check_24" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/delete"
+            style="@style/swipeItem"
+            android:background="#FF5534"
+            android:src="@drawable/ic_baseline_delete_24" />
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/plan"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true">
 
-        <TextView
-            android:id="@+id/plan_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/plan_fio"
-            app:layout_constraintTop_toBottomOf="@+id/plan_fio"
-            tools:text="Примечание: пусто" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/plan_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="2020-01-01" />
+            <TextView
+                android:id="@+id/plan_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/plan_fio"
+                app:layout_constraintTop_toBottomOf="@+id/plan_fio"
+                tools:text="Примечание: пусто" />
 
-        <TextView
-            android:id="@+id/plan_fio"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/plan_data"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Пользователь: Бавыкина Варвара Александровна" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/plan_weak_name"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/top_round"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Понедельник" />
+
+            <TextView
+                android:id="@+id/plan_data"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bottom_round"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toEndOf="@+id/plan_weak_name"
+                app:layout_constraintStart_toStartOf="@+id/plan_weak_name"
+                app:layout_constraintTop_toBottomOf="@+id/plan_weak_name"
+                tools:text="2020-01-01" />
+
+            <TextView
+                android:id="@+id/plan_fio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="10dp"
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/plan_data"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Пользователь: Бавыкина Варвара Александровна" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</com.daimajia.swipe.SwipeLayout>

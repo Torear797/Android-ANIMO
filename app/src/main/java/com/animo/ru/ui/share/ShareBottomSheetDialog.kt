@@ -4,6 +4,7 @@ import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.telephony.PhoneNumberUtils
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -23,6 +24,7 @@ import com.animo.ru.models.answers.BaseAnswer
 import com.animo.ru.models.answers.GetDoctorsFromSpecAndReg
 import com.animo.ru.models.answers.ShareDoctor
 import com.animo.ru.utilities.SpacesItemDecoration
+import com.animo.ru.utilities.hideKeyboard
 import com.animo.ru.utilities.isAppAvailable
 import com.animo.ru.utilities.showToast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -78,6 +80,12 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
 
         chipGroup = view.findViewById(R.id.mainTagChipGroup)
         autoCompleteTextView = view.findViewById(R.id.mainTagAutoCompleteTextView)
+
+
+        autoCompleteTextView!!.setImeActionLabel(
+            resources.getString(R.string.search_title),
+            EditorInfo.IME_ACTION_DONE
+        )
 
         accessSpeciality?.values?.toList()?.let {
             loadTagsUi(

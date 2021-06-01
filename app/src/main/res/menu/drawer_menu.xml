@@ -42,34 +42,33 @@
             android:title="@string/m_searchPharmacy_title" />
     </group>-->
 
-<!--
-    <item android:title="Активность">
+    <item android:title="@string/menu_activity_title">
         <menu>
             <group
                 android:id="@+id/grp3"
                 android:checkableBehavior="single">
 
                 <item
-                    android:id="@+id/fragment5"
-                    android:icon="@drawable/ic_launcher_background"
-                    android:title="Планы/Отчеты" />
-                <item
-                    android:id="@+id/fragment6"
-                    android:icon="@drawable/ic_launcher_background"
-                    android:title="Вневизитная активность" />
+                    android:id="@+id/nav_plans_reports"
+                    android:icon="@drawable/ic_baseline_document_scanner_24"
+                    android:title="@string/plans_report_titile" />
             </group>
         </menu>
-    </item>-->
+    </item>
 
-    <item
-        android:id="@+id/nav_preparations"
-        android:icon="@drawable/ic_baseline_medical_services_24"
-        android:title="@string/preparations_text" />
+    <group
+        android:id="@+id/singleOptions"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_preparations"
+            android:icon="@drawable/ic_baseline_medical_services_24"
+            android:title="@string/preparations_text" />
 
-    <item
-        android:id="@+id/nav_events"
-        android:icon="@drawable/ic_baseline_event_note_24"
-        android:title="@string/menu_events" />
+        <item
+            android:id="@+id/nav_events"
+            android:icon="@drawable/ic_baseline_event_note_24"
+            android:title="@string/menu_events" />
+    </group>
 
     <group
         android:id="@+id/dopOptions"
@@ -78,10 +77,6 @@
       <!--  <item
             android:icon="@android:drawable/ic_menu_manage"
             android:title="Настройки" />-->
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_baseline_exit_to_app_24"
-            android:title="Выход" />
-    </group>
+         </group>
 
 </menu>

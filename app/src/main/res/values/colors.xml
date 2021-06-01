@@ -23,4 +23,7 @@
     <color name="GreyBackground">#eeeeee</color>
 
     <color name="field">#f4f7f9</color>
+    <color name="date_bottom_color">#4DC88A</color>
+    <color name="date_top_color">#39b87b</color>
+    <color name="right_bg">#fc515b</color>
 </resources>

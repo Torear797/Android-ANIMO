@@ -86,4 +86,17 @@ interface RetrofitServices {
         @Field("new_password") new_password: String,
         @Field("repeat_password") repeat_password: String
     ): Call<BaseAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/listPlans")
+    fun getPlans(
+        @Field("token") token: String
+    ): Call<GetPlansAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/deletePlan")
+    fun deletePlan(
+        @Field("token") token: String,
+        @Field("planId") planId: Int
+    ): Call<BaseAnswer>
 }

@@ -60,4 +60,15 @@
         <item name="android:topRightRadius">5dp</item>
     </style>
 
+    <style name="swipeItem">
+        <item name="android:paddingLeft">25dp</item>
+        <item name="android:paddingRight">25dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:tint">@android:color/white</item>
+    </style>
+
 </resources>

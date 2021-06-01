@@ -6,17 +6,6 @@
     app:startDestination="@id/nav_profile">
 
     <fragment
-        android:id="@+id/nav_search_doctors"
-        android:name="com.animo.ru.ui.search.doctors.SearchDoctorsFragment"
-        android:label="@string/m_searchDoctors_title"
-        tools:layout="@layout/fragment_search_doctors" />
-    <fragment
-        android:id="@+id/nav_search_pharmacy"
-        android:name="com.animo.ru.ui.search.pharmacy.SearchPharmacyFragment"
-        android:label="@string/m_searchPharmacy_title"
-        tools:layout="@layout/fragment_search_pharmacy" />
-
-    <fragment
         android:id="@+id/nav_cur_visits"
         android:name="com.animo.ru.ui.currentVisits.CurrentVisitsFragment"
         android:label="@string/m_cur_visits"
@@ -31,10 +20,6 @@
             android:id="@+id/action_nav_profile_to_nav_change_password"
             app:destination="@id/nav_change_password" />
     </fragment>
-
-    <fragment
-        android:id="@+id/nav_logout"
-        android:name="com.animo.ru.ui.LogoutFragment" />
 
     <fragment
         android:id="@+id/nav_preparations"
@@ -63,4 +48,10 @@
         android:name="com.animo.ru.ui.change_password.ChangePasswordFragment"
         android:label="@string/changePasswordText"
         tools:layout="@layout/fragment_change_password" />
+
+    <fragment
+        android:id="@+id/nav_plans_reports"
+        android:name="com.animo.ru.ui.activity_tab.plans_reports.PlansReportsFragment"
+        android:label="@string/plans_report_titile"
+        tools:layout="@layout/fragment_plans_reports" />
 </navigation>

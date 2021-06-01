@@ -45,8 +45,8 @@ class PlansAdapter(
     override fun onBindViewHolder(holder: PlanHolder, position: Int) {
         val visit = visits[position]
 
-        holder.dataText.text = visit.data
-        holder.descriptionText.text = "Примечание: ${visit.description}"
+        holder.dataText.text = visit.date
+        holder.descriptionText.text = "Примечание: ${visit.note}"
         holder.fioText.text = visit.user
 
     }

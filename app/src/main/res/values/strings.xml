@@ -4,11 +4,8 @@
     <string name="action_sign_in">Войти</string>
     <string name="hint_password">Пароль</string>
     <string name="hint_email">Логин</string>
-    <string name="m_searchDoctors_title">Поиск доктора</string>
-    <string name="m_searchPharmacy_title">Поиск аптеки</string>
     <string name="m_cur_visits">Текущие визиты</string>
     <string name="m_profile">Профиль</string>
-    <string name="hello_blank_fragment">Препараты</string>
     <string name="text_start_visit">Начать визит</string>
     <string name="text_end_visit">Закончить визит</string>
     <string name="text_default_start_visit">Начало визита:</string>
@@ -35,4 +32,7 @@
     <string name="change_password_btn">Сменить пароль</string>
     <string name="hello_user_menu">Здравствуйте, %1$s</string>
     <string name="user_role_menu">Ваша роль, %1$s</string>
+    <string name="menu_activity_title">Активность</string>
+    <string name="plans_report_titile">Планы/Отчеты</string>
+    <string name="search_title">Поиск</string>
 </resources>

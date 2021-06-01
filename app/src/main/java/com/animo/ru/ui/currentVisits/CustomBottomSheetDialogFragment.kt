@@ -8,15 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.core.view.ViewCompat
 import com.animo.ru.R
 import com.animo.ru.models.Plan
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,8 +27,8 @@ class CustomBottomSheetDialogFragment : BottomSheetDialogFragment() {
         fun newInstance(clickPlan: Plan): CustomBottomSheetDialogFragment {
             val fragment = CustomBottomSheetDialogFragment()
             val args = Bundle()
-            args.putSerializable("clickPlan", clickPlan)
-            fragment.arguments = args
+//            args.putSerializable("clickPlan", clickPlan)
+//            fragment.arguments = args
             return fragment
         }
     }

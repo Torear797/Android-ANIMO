@@ -125,12 +125,12 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
     }
 
 
-    override fun onItemClick(preparatId: Int, jumpId: Int) {
+    override fun onItemClick(medicationId: Int, jumpId: Int) {
         currentPositionLastPackage =
             (curRecyclerViewLastPreparations.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
         val bundle = Bundle()
-        bundle.putInt("medicationId", preparatId)
+        bundle.putInt("medicationId", medicationId)
         bundle.putInt("infoPackageId", jumpId)
         navController?.navigate(R.id.nav_info_package, bundle)
     }
