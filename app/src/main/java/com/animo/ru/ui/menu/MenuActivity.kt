@@ -41,19 +41,12 @@ class MenuActivity : AppCompatActivity() {
                 R.id.nav_profile,
                 R.id.nav_preparations,
                 R.id.nav_events,
+                R.id.nav_base,
                 R.id.nav_plans_reports
             ), drawerLayout
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-//        navController.addOnDestinationChangedListener { _, destination, _ ->
-//            when (destination.id) {
-//                R.id.nav_logout -> {
-//                    App.logout(applicationContext, this)
-//                }
-//            }
-//        }
 
         navView.setupWithNavController(navController)
 

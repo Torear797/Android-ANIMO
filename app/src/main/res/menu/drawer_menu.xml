@@ -7,40 +7,11 @@
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_baseline_account_circle_24"
         android:title="@string/m_profile" />
-<!--    <item-->
-<!--        android:id="@+id/nav_cur_visits"-->
-<!--        android:icon="@android:drawable/star_on"-->
-<!--        android:title="@string/m_cur_visits" />-->
 
-<!--    <item android:title="Добавить">
-        <menu>
-            <group
-                android:id="@+id/grp1"
-                android:checkableBehavior="single">
-                <item
-                    android:id="@+id/fragment3"
-                    android:icon="@drawable/ic_launcher_background"
-                    android:title="Доктора" />
-                <item
-                    android:id="@+id/fragment4"
-                    android:icon="@drawable/ic_launcher_background"
-                    android:title="Аптеку" />
-            </group>
-        </menu>
-    </item>-->
-
-<!--    <group
-        android:id="@+id/grp2"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_search_doctors"
-            android:icon="@android:drawable/ic_search_category_default"
-            android:title="@string/m_searchDoctors_title" />
-        <item
-            android:id="@+id/nav_search_pharmacy"
-            android:icon="@android:drawable/ic_search_category_default"
-            android:title="@string/m_searchPharmacy_title" />
-    </group>-->
+    <item
+        android:id="@+id/nav_base"
+        android:icon="@drawable/ic_baseline_amp_stories_24"
+        android:title="@string/base_title" />
 
     <item android:title="@string/menu_activity_title">
         <menu>
@@ -69,14 +40,5 @@
             android:icon="@drawable/ic_baseline_event_note_24"
             android:title="@string/menu_events" />
     </group>
-
-    <group
-        android:id="@+id/dopOptions"
-        android:checkableBehavior="single">
-
-      <!--  <item
-            android:icon="@android:drawable/ic_menu_manage"
-            android:title="Настройки" />-->
-         </group>
 
 </menu>

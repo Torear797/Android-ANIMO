@@ -93,7 +93,7 @@
             android:layout_height="30dp"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:contentDescription="@string/descArrow"
-            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
             app:layout_constraintBottom_toBottomOf="@+id/ip_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ip_name" />

@@ -99,4 +99,32 @@ interface RetrofitServices {
         @Field("token") token: String,
         @Field("planId") planId: Int
     ): Call<BaseAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/searchDoctors")
+    fun searchDoctors(
+        @Field("token") token: String,
+        @FieldMap searchOptions: HashMap<String, String>
+    ): Call<SearchDoctorsAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/searchPharmacy")
+    fun searchPharmacy(
+        @Field("token") token: String,
+        @FieldMap searchOptions: HashMap<String, String>
+    ): Call<SearchPharmacyAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/attachDoctorByUser")
+    fun attachDoctor(
+        @Field("token") token: String,
+        @Field("docId") docId: Int
+    ): Call<BaseAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/attachPharmacyByUser")
+    fun attachPharmacy(
+        @Field("token") token: String,
+        @Field("pharmacyId") pharmacyId: Int
+    ): Call<BaseAnswer>
 }

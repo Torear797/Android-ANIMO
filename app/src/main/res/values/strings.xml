@@ -21,7 +21,8 @@
     <string name="descriptionSharing">Кнопка шеринга</string>
     <string name="descArrow">arrow</string>
     <string name="speciality">Специальность</string>
-    <string name="choceDoctor">Доктор</string>
+    <string name="choiceDoctor">Доктор</string>
+    <string name="pharmacyTitle">Аптека</string>
     <string name="menu_events">Мероприятия</string>
     <string name="changePassText">Сменить пароль</string>
     <string name="logoutText">Выход</string>
@@ -35,4 +36,9 @@
     <string name="menu_activity_title">Активность</string>
     <string name="plans_report_titile">Планы/Отчеты</string>
     <string name="search_title">Поиск</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="base_title">База</string>
+    <string name="create_plan_title">Создать план</string>
+    <string name="pharmacy_title">Аптека</string>
 </resources>

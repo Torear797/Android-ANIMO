@@ -64,6 +64,14 @@ data class User(
         return arrayRoles
     }
 
+    fun getFirstRegionId(): Int{
+        regions?.forEach {
+          return it.key
+        }
+
+        return 0
+    }
+
     fun getRolesArrayName(): List<String> {
         val arrayRoles: MutableList<String> = mutableListOf()
 

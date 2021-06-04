@@ -87,7 +87,7 @@ class EventsAdapter(
                     holder.btnArrow.animate().rotation(0F)
                 } else {
                     holder.myGroup.visibility = View.VISIBLE
-                    holder.btnArrow.animate().rotation(-180F)
+                    holder.btnArrow.animate().rotation(90F)
                 }
             }
         }

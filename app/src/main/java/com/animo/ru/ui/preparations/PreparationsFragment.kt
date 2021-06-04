@@ -124,7 +124,6 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
         }
     }
 
-
     override fun onItemClick(medicationId: Int, jumpId: Int) {
         currentPositionLastPackage =
             (curRecyclerViewLastPreparations.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
