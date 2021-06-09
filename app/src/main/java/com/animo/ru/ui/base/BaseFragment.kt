@@ -14,6 +14,7 @@ import com.animo.ru.models.Doctor
 import com.animo.ru.models.Pharmacy
 import com.animo.ru.models.answers.SearchDoctorsAnswer
 import com.animo.ru.models.answers.SearchPharmacyAnswer
+import com.animo.ru.ui.currentVisits.CustomBottomSheetDialogFragment
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.showToast
 import com.google.android.material.tabs.TabLayout
@@ -47,8 +48,8 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
     private lateinit var countDoctors: TextView
     private lateinit var countPharmacy: TextView
 
-    private var selectedDoctors: MutableList<Int> = mutableListOf()
-    private var selectedPharmacy: MutableList<Int> = mutableListOf()
+    private val selectedDoctors = ArrayList<Int>()
+    private val selectedPharmacy = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -176,7 +177,8 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
                 showToast("Поиск")
             }
             R.id.createPlan -> {
-                showToast("Новый план")
+                val myBottomSheet: AddPlanFragment = AddPlanFragment.newInstance(selectedDoctors, selectedPharmacy)
+                myBottomSheet.show(childFragmentManager, myBottomSheet.tag)
             }
         }
 

@@ -127,4 +127,23 @@ interface RetrofitServices {
         @Field("token") token: String,
         @Field("pharmacyId") pharmacyId: Int
     ): Call<BaseAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/getActivityData")
+    fun getActivityData(
+        @Field("token") token: String
+    ): Call<GuideDataAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/createPlan")
+    fun createPlan(
+        @Field("token") token: String,
+        @Field("dateReport") dateReport: String,
+        @Field("beginVacationDate") beginVacationDate: String,
+        @Field("endVacationDate") endVacationDate: String,
+        @Field("outvisitActivity") outvisitActivity: Int,
+        @Field("note") note: String,
+        @Field("arrDocId[]") arrDocId: ArrayList<Int>,
+        @Field("arrPharmId[]") arrPharmId: ArrayList<Int>
+    ): Call<BaseAnswer>
 }

@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.R
-import com.animo.ru.models.LastInfoPackage
 import com.animo.ru.models.Medication
 import com.animo.ru.utilities.deleteListener
+import java.util.*
 
 class MedicationsAdapter(
-    private val preparations: MutableMap<Int, Medication>,
+    private val preparations: TreeMap<Int, Medication>,
     private val listener: OnItemClickListener
 ) :
     RecyclerView.Adapter<MedicationsAdapter.MedicationHolder>() {
@@ -46,9 +46,12 @@ class MedicationsAdapter(
         holder.itemView.setOnClickListener {
             if (holder.adapterPosition != RecyclerView.NO_POSITION) {
                 preparations[getPositionKey(holder.adapterPosition)]?.let {
-                    listener.onItemClick(
-                        getPositionKey(holder.adapterPosition)
-                    )
+                    val medication = preparations[getPositionKey(holder.adapterPosition)]
+                    if (medication != null) {
+                        listener.onItemClick(
+                            medication.id.toInt()
+                        )
+                    }
                 }
             }
         }

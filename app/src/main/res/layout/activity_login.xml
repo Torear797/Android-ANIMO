@@ -106,7 +106,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_password"
                             android:inputType="textPassword"
-                            android:selectAllOnFocus="true" />
+                            />
                     </com.google.android.material.textfield.TextInputLayout>
 
 

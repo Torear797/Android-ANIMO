@@ -11,7 +11,6 @@ import com.animo.ru.models.answers.GetSpecAndRegAnswer
 import com.animo.ru.retrofit.Common
 import com.animo.ru.retrofit.RetrofitServices
 import com.animo.ru.ui.authorization.LoginActivity
-import com.animo.ru.utilities.showToast
 import com.orhanobut.hawk.Hawk
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,8 +36,7 @@ class App : Application() {
             activity.finish()
         }
 
-
-         fun sendGetSpecialityAndRegions(){
+        fun sendGetSpecialityAndRegions() {
             mService.getSpecAndReg(user.token!!).enqueue(
                 object : Callback<GetSpecAndRegAnswer> {
                     override fun onFailure(call: Call<GetSpecAndRegAnswer>, t: Throwable) {}

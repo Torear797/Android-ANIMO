@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -19,18 +20,23 @@ import com.animo.ru.R
 import com.animo.ru.models.LastInfoPackage
 import com.animo.ru.models.Medication
 import com.animo.ru.models.answers.MedicationDataAnswer
+import com.animo.ru.room.AppDatabase
 import com.animo.ru.utilities.SpacesItemDecoration
+import com.animo.ru.utilities.isOnline
 import com.animo.ru.utilities.showToast
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListener,
     MedicationsAdapter.OnItemClickListener {
-    private var lastInfoPackages: MutableMap<Int, LastInfoPackage>? = null
-    private var preparations: MutableMap<Int, Medication>? = null
+
     private val mFragmentTitleList = listOf("Последние инфопакеты", "Препараты")
 
     private var currentPositionLastPackage = 0
@@ -41,6 +47,10 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
     private lateinit var curRecyclerViewMedications: RecyclerView
 
     private var navController: NavController? = null
+
+    private var db: AppDatabase? = null
+
+    private val lastInfoPreparationsModel: PreparationsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,17 +71,33 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
             tab.text = mFragmentTitleList[position]
         }.attach()
 
+        db = AppDatabase.getAppDataBase(context = this.requireContext())
+
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        lastInfoPreparationsModel.preparations.observe(viewLifecycleOwner, {
+            viewpager.adapter!!.notifyDataSetChanged()
+        })
+
+        lastInfoPreparationsModel.lastInfoPackages.observe(viewLifecycleOwner, {
+            viewpager.adapter!!.notifyDataSetChanged()
+        })
     }
 
     override fun onStart() {
         super.onStart()
-        if (preparations == null && lastInfoPackages == null) {
-            sendGetMedicationsDataRequest()
-        }
 
-        if (accessRegions == null || accessSpeciality == null) {
-            sendGetSpecialityAndRegions()
+        if (isOnline(this.requireContext())) {
+            if (accessRegions == null || accessSpeciality == null) {
+                sendGetSpecialityAndRegions()
+            }
+            sendGetMedicationsDataRequest()
+        } else {
+            getOfflineData()
         }
     }
 
@@ -86,10 +112,9 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
                     .inflate(R.layout.recyclerview_layout, parent, false)
             )
 
-
         override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
             (holder.view as? RecyclerView)?.also {
-                if (!lastInfoPackages.isNullOrEmpty() && !preparations.isNullOrEmpty()) {
+                if (!lastInfoPreparationsModel.lastInfoPackages.value.isNullOrEmpty() && !lastInfoPreparationsModel.preparations.value.isNullOrEmpty()) {
                     initRecyclerView(it, position)
                 }
             }
@@ -109,14 +134,20 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
             LinearLayoutManager(recyclerView.context, LinearLayoutManager.VERTICAL, false)
 
         if (position == 1) {
-            recyclerView.adapter = preparations?.let { MedicationsAdapter(it, this) }
+            recyclerView.adapter =
+                lastInfoPreparationsModel.preparations.value?.let { MedicationsAdapter(it, this) }
             (recyclerView.layoutManager as LinearLayoutManager).scrollToPosition(
                 currentPositionPreparations
             )
             curRecyclerViewMedications = recyclerView
 
         } else {
-            recyclerView.adapter = lastInfoPackages?.let { LastInfoPackageAdapter(it, this) }
+            recyclerView.adapter = lastInfoPreparationsModel.lastInfoPackages.value?.let {
+                LastInfoPackageAdapter(
+                    it,
+                    this
+                )
+            }
             (recyclerView.layoutManager as LinearLayoutManager).scrollToPosition(
                 currentPositionLastPackage
             )
@@ -157,13 +188,86 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
                 ) {
                     if (response.isSuccessful && response.body() != null) {
                         if (response.body()!!.status == 200.toShort()) {
-                            preparations = response.body()!!.arPreparations
-                            lastInfoPackages = response.body()!!.arLastInfoPackage
-                            viewpager.adapter!!.notifyDataSetChanged()
+                            lastInfoPreparationsModel.preparations.postValue(response.body()!!.arPreparations)
+                            lastInfoPreparationsModel.lastInfoPackages.postValue(response.body()!!.arLastInfoPackage)
+
+                            lastInfoPreparationsModel.preparations.value?.let {
+                                lastInfoPreparationsModel.lastInfoPackages.value?.let { it1 ->
+                                    insertOfflineData(
+                                        it1, it
+                                    )
+                                }
+                            }
+
                         } else
                             response.body()!!.text?.let { showToast(it) }
                     }
                 }
             })
+    }
+
+    private fun getOfflineData() {
+//        Observable.fromCallable {
+//            db?.lastInfoPackageDao()?.getAll()
+//        }.doOnNext { list ->
+//            val offlineLastPreparations: TreeMap<Int, LastInfoPackage> = TreeMap()
+//            list?.map {
+//                offlineLastPreparations.put(it.id.toInt(), it)
+//            }
+//            lastInfoPreparationsModel.lastInfoPackages.postValue(offlineLastPreparations)
+//
+//        }.subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe()
+//
+//        Observable.fromCallable {
+//            db?.medicationsDao()?.getAll()
+//        }.doOnNext { list ->
+//
+//            val offlineMedications: TreeMap<Int, Medication> = TreeMap()
+//            list?.map {
+//                offlineMedications.put(it.id.toInt(), it)
+//            }
+//            lastInfoPreparationsModel.preparations.postValue(offlineMedications)
+//
+//        }.subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe()
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val list = db?.lastInfoPackageDao()?.getAll()
+            val offlineLastPreparations: TreeMap<Int, LastInfoPackage> = TreeMap()
+            list?.map {
+                offlineLastPreparations.put(it.id.toInt(), it)
+            }
+            lastInfoPreparationsModel.lastInfoPackages.postValue(offlineLastPreparations)
+
+            val list2 = db?.medicationsDao()?.getAll()
+
+            val offlineMedications: TreeMap<Int, Medication> = TreeMap()
+            list2?.map {
+                offlineMedications.put(it.id.toInt(), it)
+            }
+            lastInfoPreparationsModel.preparations.postValue(offlineMedications)
+        }
+    }
+
+    private fun insertOfflineData(
+        lastInfoPackages: MutableMap<Int, LastInfoPackage>,
+        medications: MutableMap<Int, Medication>
+    ) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val list = mutableListOf<LastInfoPackage>()
+            lastInfoPackages.forEach { (_, lastInfoPackage) ->
+                list.add(lastInfoPackage)
+            }
+            db?.lastInfoPackageDao()?.insertAll(list)
+
+            val list2 = mutableListOf<Medication>()
+            medications.forEach { (_, item) ->
+                list2.add(item)
+            }
+            db?.medicationsDao()?.insertAll(list2)
+        }
     }
 }

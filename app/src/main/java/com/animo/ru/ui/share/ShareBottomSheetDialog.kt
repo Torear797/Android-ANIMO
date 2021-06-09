@@ -103,9 +103,9 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         idObject = arguments?.getSerializable("idObject") as Int
         sendTitle = arguments?.getString("title") as String
         sendText = arguments?.getString("text") as String
@@ -363,7 +363,7 @@ class ShareBottomSheetDialog : BottomSheetDialogFragment(),
         recyclerView!!.visibility = INVISIBLE
     }
 
-    private fun  sendShareTrackingInfo(typeBtn: String) {
+    private fun sendShareTrackingInfo(typeBtn: String) {
         val selectedDoctor: ShareDoctor = doctorsList?.selectedItem as ShareDoctor
         val idDoc = getDoctorIdForValue(selectedDoctor.fio!!)
 

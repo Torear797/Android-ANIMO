@@ -227,6 +227,7 @@ class LoginActivity : AppCompatActivity(), TextView.OnEditorActionListener {
                     validateUserName()
                 }
                 R.id.password -> {
+                    if(username.text.toString().length > 3)
                     validatePassword()
                 }
             }
@@ -239,12 +240,10 @@ class LoginActivity : AppCompatActivity(), TextView.OnEditorActionListener {
         when {
             password.text.toString().trim().isEmpty() -> {
                 pass.error = "Обязательное поле!"
-                password.requestFocus()
                 return false
             }
             password.text.toString().length < 5 -> {
                 pass.error = "Длина пароля должна быть минимум 5 символов!"
-                password.requestFocus()
                 return false
             }
             else -> {

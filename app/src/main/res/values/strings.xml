@@ -41,4 +41,7 @@
     <string name="base_title">База</string>
     <string name="create_plan_title">Создать план</string>
     <string name="pharmacy_title">Аптека</string>
+    <string name="plan_date_text">Дата плана</string>
+    <string name="description_text">Примечения</string>
+    <string name="send_to_plan_btn_text">Отправить в план</string>
 </resources>
