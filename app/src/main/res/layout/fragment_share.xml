@@ -13,7 +13,6 @@
         app:behavior_hideable="false"
         app:behavior_peekHeight="100dp"
         android:focusable="true"
-        android:theme="@style/ClearFocus"
         android:focusableInTouchMode="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 

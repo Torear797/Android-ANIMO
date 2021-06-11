@@ -45,4 +45,8 @@
     <string name="description_text">Примечения</string>
     <string name="send_to_plan_btn_text">Отправить в план</string>
     <string name="record_loyalty_string">Заполнение лояльности</string>
+    <string name="is_all_search_text">Общая база</string>
+    <string name="search_hint">Фамилия, название организации, адрес организации, город, примечание, Email, телефон</string>
+    <string name="save_text">Сохранить</string>
+    <string name="search_text">Поиск</string>
 </resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="specialty">
+        <item>Терапевт</item>
+        <item>Педиатр</item>
+        <item>Травматолог</item>
+        <item>ВОП</item>
+    </string-array>
+
+    <string-array name="posts">
+        <item>Врач</item>
+        <item>Гл.Врач</item>
+        <item>Зам.Гл.Врача</item>
+        <item>Зав.Аптеки Больницы</item>
+    </string-array>
+
+    <string-array name="activity">
+        <item>Все</item>
+        <item>Активные</item>
+        <item>Неактивные</item>
+    </string-array>
+
+    <string-array name="yes_no">
+        <item>Все</item>
+        <item>Да</item>
+        <item>Нет</item>
+    </string-array>
+</resources>

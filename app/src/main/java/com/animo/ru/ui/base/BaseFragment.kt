@@ -14,7 +14,7 @@ import com.animo.ru.models.Doctor
 import com.animo.ru.models.Pharmacy
 import com.animo.ru.models.answers.SearchDoctorsAnswer
 import com.animo.ru.models.answers.SearchPharmacyAnswer
-import com.animo.ru.ui.currentVisits.CustomBottomSheetDialogFragment
+import com.animo.ru.ui.share.ShareBottomSheetDialog
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.showToast
 import com.google.android.material.tabs.TabLayout
@@ -174,10 +174,16 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.search -> {
-                showToast("Поиск")
+                if (viewpager.currentItem == 0) {
+                    val myBottomSheet = SearchDoctorFragment()
+                    myBottomSheet.show(childFragmentManager, myBottomSheet.tag)
+                } else {
+                    showToast("Поиск аптеки")
+                }
             }
             R.id.createPlan -> {
-                val myBottomSheet: AddPlanFragment = AddPlanFragment.newInstance(selectedDoctors, selectedPharmacy)
+                val myBottomSheet: AddPlanFragment =
+                    AddPlanFragment.newInstance(selectedDoctors, selectedPharmacy)
                 myBottomSheet.show(childFragmentManager, myBottomSheet.tag)
             }
         }
