@@ -207,33 +207,6 @@ class PreparationsFragment : Fragment(), LastInfoPackageAdapter.OnItemClickListe
     }
 
     private fun getOfflineData() {
-//        Observable.fromCallable {
-//            db?.lastInfoPackageDao()?.getAll()
-//        }.doOnNext { list ->
-//            val offlineLastPreparations: TreeMap<Int, LastInfoPackage> = TreeMap()
-//            list?.map {
-//                offlineLastPreparations.put(it.id.toInt(), it)
-//            }
-//            lastInfoPreparationsModel.lastInfoPackages.postValue(offlineLastPreparations)
-//
-//        }.subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe()
-//
-//        Observable.fromCallable {
-//            db?.medicationsDao()?.getAll()
-//        }.doOnNext { list ->
-//
-//            val offlineMedications: TreeMap<Int, Medication> = TreeMap()
-//            list?.map {
-//                offlineMedications.put(it.id.toInt(), it)
-//            }
-//            lastInfoPreparationsModel.preparations.postValue(offlineMedications)
-//
-//        }.subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe()
-
         GlobalScope.launch(Dispatchers.IO) {
             val list = db?.lastInfoPackageDao()?.getAll()
             val offlineLastPreparations: TreeMap<Int, LastInfoPackage> = TreeMap()

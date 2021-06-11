@@ -44,4 +44,5 @@
     <string name="plan_date_text">Дата плана</string>
     <string name="description_text">Примечения</string>
     <string name="send_to_plan_btn_text">Отправить в план</string>
+    <string name="record_loyalty_string">Заполнение лояльности</string>
 </resources>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/GreyBackground"
+    tools:context=".ui.activity_tab.plans_reports.RecordLoyaltyFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Spinner
+            android:id="@+id/doctors"
+            style="@style/MySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="61.5dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:spinnerMode="dialog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutSpecName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            app:boxStrokeColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/doctors">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/specName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/field"
+                android:textColor="@android:color/black"
+                android:enabled="false" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutSpecName" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/send_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="@string/send_to_plan_btn_text"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -53,11 +53,21 @@
         android:id="@+id/nav_plans_reports"
         android:name="com.animo.ru.ui.activity_tab.plans_reports.PlansReportsFragment"
         android:label="@string/plans_report_titile"
-        tools:layout="@layout/fragment_plans_reports" />
+        tools:layout="@layout/fragment_plans_reports" >
+        <action
+            android:id="@+id/action_nav_plans_reports_to_nav_record_loyalty"
+            app:destination="@id/nav_record_loyalty" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_base"
         android:name="com.animo.ru.ui.base.BaseFragment"
         android:label="@string/base_title"
         tools:layout="@layout/fragment_base" />
+
+    <fragment
+        android:id="@+id/nav_record_loyalty"
+        android:name="com.animo.ru.ui.activity_tab.plans_reports.RecordLoyaltyFragment"
+        android:label="@string/record_loyalty_string"
+        tools:layout="@layout/fragment_record_loyalty" />
 </navigation>

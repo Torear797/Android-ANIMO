@@ -1,4 +1,4 @@
-package com.animo.ru.ui.base
+package com.animo.ru.utilities
 
 import android.content.Context
 import android.view.LayoutInflater

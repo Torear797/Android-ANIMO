@@ -146,4 +146,18 @@ interface RetrofitServices {
         @Field("arrDocId[]") arrDocId: ArrayList<Int>,
         @Field("arrPharmId[]") arrPharmId: ArrayList<Int>
     ): Call<BaseAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/getDoctorsSelectForLoyalty")
+    fun getDoctorsSelectForLoyalty(
+        @Field("token") token: String,
+        @Field("planId") planId: Int
+    ): Call<GuideDataAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/getSegmentLoyaltyFormData")
+    fun getSegmentLoyaltyFormData(
+        @Field("token") token: String,
+        @Field("idDoctor") idDoctor: Int
+    ): Call<RecordLoyaltyFormDataAnswer>
 }

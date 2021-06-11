@@ -12,6 +12,7 @@ import com.animo.ru.R
 import com.animo.ru.models.GuideData
 import com.animo.ru.models.answers.BaseAnswer
 import com.animo.ru.models.answers.GuideDataAnswer
+import com.animo.ru.utilities.GuideSpinnerAdapter
 import com.animo.ru.utilities.showToast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton

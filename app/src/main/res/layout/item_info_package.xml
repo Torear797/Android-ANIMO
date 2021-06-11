@@ -34,7 +34,6 @@
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             app:layout_constraintBottom_toTopOf="@+id/ip_type_package"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ip_name"
             tools:text="Основной текст" />

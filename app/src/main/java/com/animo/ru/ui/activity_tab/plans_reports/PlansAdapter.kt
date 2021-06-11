@@ -13,7 +13,7 @@ import com.daimajia.swipe.SwipeLayout
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
 
 class PlansAdapter(
-    private var plans: MutableMap<Int, Plan>,
+    private val plans: MutableMap<Int, Plan>,
     private val listener: OnPlansClickListener
 ) : RecyclerSwipeAdapter<PlansAdapter.PlansHolder>() {
 
@@ -30,8 +30,8 @@ class PlansAdapter(
 
         private val swipeLayout: SwipeLayout = itemView.findViewById(R.id.swipeLayout)
 
-         val deleteBtn: ImageView = itemView.findViewById(R.id.delete)
-         val sendBtn: ImageView = itemView.findViewById(R.id.send)
+        val deleteBtn: ImageView = itemView.findViewById(R.id.delete)
+        val sendBtn: ImageView = itemView.findViewById(R.id.send)
 
         fun bind(plan: Plan) {
             plan_fio.text = "Пользователь: ${plan.user}"
@@ -105,12 +105,13 @@ class PlansAdapter(
         return 0
     }
 
-    fun update(modelList: MutableMap<Int, Plan>) {
-        plans = modelList
+    fun update(modelList: Map<Int, Plan>) {
+        plans.clear()
+        plans.putAll(modelList)
         notifyDataSetChanged()
     }
 
-    fun removeItem(id:Int, position: Int) {
+    fun removeItem(id: Int, position: Int) {
         plans.remove(id)
         notifyItemRemoved(position)
     }

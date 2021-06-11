@@ -58,6 +58,7 @@ class InfoPackageFragment : Fragment(), InfoPackageAdapter.OnInfoPackageClickLis
         recyclerView!!.addItemDecoration(SpacesItemDecoration(10, 10))
         recyclerView!!.itemAnimator = DefaultItemAnimator()
         recyclerView!!.setHasFixedSize(true)
+        recyclerView!!.setBackgroundColor(resources.getColor(R.color.GreyBackground, resources.newTheme()))
         recyclerView!!.layoutManager =
             LinearLayoutManager(recyclerView!!.context, LinearLayoutManager.VERTICAL, false)
         recyclerView!!.adapter = infoPackages?.let { InfoPackageAdapter(it, this) }
