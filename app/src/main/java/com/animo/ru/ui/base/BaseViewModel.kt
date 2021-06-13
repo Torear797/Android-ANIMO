@@ -28,6 +28,9 @@ class BaseViewModel : ViewModel() {
     var isLoadingDoctor: Boolean = false
     var isLoadingPharmacy: Boolean = false
 
+    var isLastDoctorPage: Boolean = false
+    var isLastPharmacyPage: Boolean = false
+
     init {
         newDoctors.value = TreeMap<Int, Doctor>()
         newPharmacyList.value = TreeMap<Int, Pharmacy>()

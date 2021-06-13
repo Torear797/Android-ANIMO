@@ -23,9 +23,6 @@ class BaseFragment : Fragment() {
 
     private lateinit var viewpager: ViewPager2
 
-    private var isLastDoctorPage: Boolean = false
-    private var isLastPharmacyPage: Boolean = false
-
     private lateinit var countDoctors: TextView
     private lateinit var countPharmacy: TextView
 
@@ -125,7 +122,7 @@ class BaseFragment : Fragment() {
                 recyclerView.layoutManager as LinearLayoutManager
             ) {
                 override fun isLastPage(): Boolean {
-                    return isLastDoctorPage
+                    return baseViewModel.isLastDoctorPage
                 }
 
                 override fun isLoading(): Boolean {
@@ -163,7 +160,7 @@ class BaseFragment : Fragment() {
                 recyclerView.layoutManager as LinearLayoutManager
             ) {
                 override fun isLastPage(): Boolean {
-                    return isLastPharmacyPage
+                    return baseViewModel.isLastPharmacyPage
                 }
 
                 override fun isLoading(): Boolean {
@@ -226,7 +223,7 @@ class BaseFragment : Fragment() {
             }
 
             if (baseViewModel.newPharmacyList.value!!.size == 0 || baseViewModel.newPharmacyList.value!!.size < baseViewModel.searchPharmacyOptions["countOnPage"]!!.toInt()) {
-                isLastPharmacyPage = true
+                baseViewModel.isLastPharmacyPage = true
             }
         }
 
@@ -245,7 +242,7 @@ class BaseFragment : Fragment() {
             }
 
             if (baseViewModel.newDoctors.value!!.size == 0 || baseViewModel.newDoctors.value!!.size < baseViewModel.searchDoctorOptions["countOnPage"]!!.toInt()) {
-                isLastDoctorPage = true
+                baseViewModel.isLastDoctorPage = true
             }
         }
 

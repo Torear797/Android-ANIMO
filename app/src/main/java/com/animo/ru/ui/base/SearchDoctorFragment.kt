@@ -30,6 +30,7 @@ class SearchDoctorFragment : BottomSheetDialogFragment() {
         }
 
         searchBtn.setOnClickListener {
+            baseViewModel.isLastDoctorPage = false
             baseViewModel.searchDoctorOptions["start"] = "0"
             baseViewModel.doctors.clear()
             baseViewModel.searchDoctors()

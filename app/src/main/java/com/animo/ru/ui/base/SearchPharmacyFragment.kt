@@ -31,6 +31,7 @@ class SearchPharmacyFragment : BottomSheetDialogFragment() {
         }
 
         searchBtn.setOnClickListener {
+            baseViewModel.isLastPharmacyPage = false
             baseViewModel.searchPharmacyOptions["start"] = "0"
             baseViewModel.pharmacyList.clear()
             baseViewModel.searchPharmacy()
