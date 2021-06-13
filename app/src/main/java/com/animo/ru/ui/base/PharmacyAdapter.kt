@@ -21,7 +21,7 @@ class PharmacyAdapter(
 ) : RecyclerSwipeAdapter<PharmacyAdapter.PharmacyHolder>() {
 
     interface OnItemClickListener {
-        fun onAttachPharmacy(pharmacy: Pharmacy)
+        fun onAttachPharmacy(pharmacy: Pharmacy, position: Int)
         fun onAddToPlanPharmacy(pharmacyId: Int)
     }
 
@@ -84,7 +84,7 @@ class PharmacyAdapter(
             if (holder.adapterPosition != RecyclerView.NO_POSITION) {
                 closeAllItems()
                 val id = getPositionKey(holder.adapterPosition)
-                pharmacyList[id]?.let { it1 -> listener.onAttachPharmacy(it1) }
+                pharmacyList[id]?.let { it1 -> listener.onAttachPharmacy(it1, holder.adapterPosition) }
             }
         }
 
@@ -135,8 +135,14 @@ class PharmacyAdapter(
         return 0
     }
 
+    fun removeItem(id: Int, position: Int) {
+        pharmacyList.remove(id)
+        notifyItemRemoved(position)
+    }
+
     fun update(modelList: TreeMap<Int, Pharmacy>) {
         pharmacyList.clear()
+        notifyDataSetChanged()
         pharmacyList.putAll(modelList)
         notifyItemRangeInserted(0, modelList.size)
     }

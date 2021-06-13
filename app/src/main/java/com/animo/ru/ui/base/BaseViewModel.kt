@@ -7,6 +7,7 @@ import com.animo.ru.R
 import com.animo.ru.models.Doctor
 import com.animo.ru.models.Pharmacy
 import com.animo.ru.models.answers.SearchDoctorsAnswer
+import com.animo.ru.models.answers.SearchPharmacyAnswer
 import com.animo.ru.utilities.showToast
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,6 +26,7 @@ class BaseViewModel : ViewModel() {
     var newPharmacyList: MutableLiveData<TreeMap<Int, Pharmacy>> = MutableLiveData()
 
     var isLoadingDoctor: Boolean = false
+    var isLoadingPharmacy: Boolean = false
 
     init {
         newDoctors.value = TreeMap<Int, Doctor>()
@@ -60,6 +62,27 @@ class BaseViewModel : ViewModel() {
                     }
 
                     isLoadingDoctor = false
+                }
+            })
+    }
+
+    fun searchPharmacy() {
+        isLoadingPharmacy = true
+        App.mService.searchPharmacy(App.user.token!!, searchPharmacyOptions).enqueue(
+            object : Callback<SearchPharmacyAnswer> {
+                override fun onFailure(call: Call<SearchPharmacyAnswer>, t: Throwable) {}
+
+                override fun onResponse(
+                    call: Call<SearchPharmacyAnswer>,
+                    response: Response<SearchPharmacyAnswer>
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        if (response.body()!!.status == 200.toShort()) {
+                            newPharmacyList.postValue(response.body()!!.pharmacy)
+                        }
+                    }
+
+                    isLoadingPharmacy = false
                 }
             })
     }

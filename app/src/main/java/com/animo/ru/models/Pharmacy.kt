@@ -2,15 +2,17 @@ package com.animo.ru.models
 
 import android.content.Context
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.answers.BaseAnswer
+import com.animo.ru.ui.base.PharmacyAdapter
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class Pharmacy (
+class Pharmacy(
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")
@@ -45,7 +47,10 @@ class Pharmacy (
     val note: String,
     var isOpen: Boolean = false
 ) {
-    fun attach(pharmacyId: Int, context: Context) {
+    fun attach(
+        pharmacyId: Int, context: Context, recyclerView: RecyclerView,
+        position: Int
+    ) {
         App.mService.attachPharmacy(App.user.token!!, pharmacyId)
             .enqueue(
                 object : Callback<BaseAnswer> {
@@ -60,7 +65,10 @@ class Pharmacy (
                     ) {
                         if (response.isSuccessful && response.body() != null) {
                             if (response.body()!!.status == 200.toShort()) {
-//                                Toast.makeText(context, response.body()!!.text, Toast.LENGTH_SHORT).show()
+                                (recyclerView.adapter as PharmacyAdapter).removeItem(
+                                    pharmacyId,
+                                    position
+                                )
                             } else
                                 response.body()!!.text?.let {
                                     Toast.makeText(context, it, Toast.LENGTH_SHORT).show()

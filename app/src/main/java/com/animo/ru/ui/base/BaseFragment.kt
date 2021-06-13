@@ -3,37 +3,28 @@ package com.animo.ru.ui.base
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.Doctor
 import com.animo.ru.models.Pharmacy
-import com.animo.ru.models.answers.SearchPharmacyAnswer
 import com.animo.ru.utilities.SpacesItemDecoration
-import com.animo.ru.utilities.showToast
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
 
 
-class BaseFragment : Fragment(), PharmacyAdapter.OnItemClickListener {
+class BaseFragment : Fragment() {
     private val mFragmentTitleList = listOf("Доктора", "Аптеки")
 
     private lateinit var viewpager: ViewPager2
 
     private var isLastDoctorPage: Boolean = false
-
     private var isLastPharmacyPage: Boolean = false
-    private var isLoadingPharmacy: Boolean = false
 
     private lateinit var countDoctors: TextView
     private lateinit var countPharmacy: TextView
@@ -94,7 +85,7 @@ class BaseFragment : Fragment(), PharmacyAdapter.OnItemClickListener {
                 if (position == 0) {
                     baseViewModel.searchDoctors()
                 } else {
-                    searchPharmacy()
+                    baseViewModel.searchPharmacy()
                 }
             }
         }
@@ -127,7 +118,6 @@ class BaseFragment : Fragment(), PharmacyAdapter.OnItemClickListener {
 
                         updateCurrentPlanTable(isDoctorsChange = true, isPharmacyChange = false)
                     }
-
                 }
             )
 
@@ -150,9 +140,24 @@ class BaseFragment : Fragment(), PharmacyAdapter.OnItemClickListener {
             baseViewModel.newDoctors.observe(viewLifecycleOwner, {
                 insertNewDoctorsItems(recyclerView)
             })
-        }
-        else {
-            recyclerView.adapter = PharmacyAdapter(baseViewModel.pharmacyList, this)
+        } else {
+            recyclerView.adapter = PharmacyAdapter(baseViewModel.pharmacyList,
+                object : PharmacyAdapter.OnItemClickListener {
+                    override fun onAttachPharmacy(pharmacy: Pharmacy, position: Int) {
+                        pharmacy.attach(pharmacy.id, context!!, recyclerView, position)
+                    }
+
+                    override fun onAddToPlanPharmacy(pharmacyId: Int) {
+                        if (!selectedPharmacy.contains(pharmacyId)) {
+                            selectedPharmacy.add(pharmacyId)
+                        } else {
+                            selectedPharmacy.remove(pharmacyId)
+                        }
+
+                        updateCurrentPlanTable(isDoctorsChange = false, isPharmacyChange = true)
+                    }
+
+                })
 
             recyclerView.addOnScrollListener(object : PaginationScrollListener(
                 recyclerView.layoutManager as LinearLayoutManager
@@ -162,11 +167,11 @@ class BaseFragment : Fragment(), PharmacyAdapter.OnItemClickListener {
                 }
 
                 override fun isLoading(): Boolean {
-                    return isLoadingPharmacy
+                    return baseViewModel.isLoadingPharmacy
                 }
 
                 override fun loadMoreItems() {
-                    searchPharmacy()
+                    baseViewModel.searchPharmacy()
                 }
             })
 
@@ -204,61 +209,9 @@ class BaseFragment : Fragment(), PharmacyAdapter.OnItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-//    override fun onAttachDoctor(doctorId: Int, doctor: Doctor) {
-//        this.context?.let { doctor.attach(doctorId, it) }
-//    }
-
-//    override fun onAddToPlanDoctor(doctorId: Int) {
-//        if (!selectedDoctors.contains(doctorId)) {
-//            selectedDoctors.add(doctorId)
-//        } else {
-//            selectedDoctors.remove(doctorId)
-//        }
-//
-//        updateCurrentPlanTable(isDoctorsChange = true, isPharmacyChange = false)
-//    }
-
-    private fun searchPharmacy() {
-        isLoadingPharmacy = true
-        App.mService.searchPharmacy(App.user.token!!, baseViewModel.searchPharmacyOptions).enqueue(
-            object : Callback<SearchPharmacyAnswer> {
-                override fun onFailure(call: Call<SearchPharmacyAnswer>, t: Throwable) {
-                    showToast(getString(R.string.error_server_lost))
-                }
-
-                override fun onResponse(
-                    call: Call<SearchPharmacyAnswer>,
-                    response: Response<SearchPharmacyAnswer>
-                ) {
-                    if (response.isSuccessful && response.body() != null) {
-                        if (response.body()!!.status == 200.toShort()) {
-                            baseViewModel.newPharmacyList.postValue(response.body()!!.pharmacy)
-                        } else
-                            response.body()!!.text?.let { showToast(it) }
-                    }
-
-                    isLoadingPharmacy = false
-                }
-            })
-    }
-
     private fun updateCurrentPlanTable(isDoctorsChange: Boolean, isPharmacyChange: Boolean) {
         if (isDoctorsChange) countDoctors.text = selectedDoctors.size.toString()
         if (isPharmacyChange) countPharmacy.text = selectedPharmacy.size.toString()
-    }
-
-    override fun onAttachPharmacy(pharmacy: Pharmacy) {
-        this.context?.let { pharmacy.attach(pharmacy.id, it) }
-    }
-
-    override fun onAddToPlanPharmacy(pharmacyId: Int) {
-        if (!selectedPharmacy.contains(pharmacyId)) {
-            selectedPharmacy.add(pharmacyId)
-        } else {
-            selectedPharmacy.remove(pharmacyId)
-        }
-
-        updateCurrentPlanTable(isDoctorsChange = false, isPharmacyChange = true)
     }
 
     private fun insertNewPharmacyItems(recyclerView: RecyclerView) {
