@@ -3,6 +3,7 @@ package com.animo.ru.ui.base
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -23,8 +24,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
-    PharmacyAdapter.OnItemClickListener {
+
+class BaseFragment : Fragment(), PharmacyAdapter.OnItemClickListener {
     private val mFragmentTitleList = listOf("Доктора", "Аптеки")
 
     private lateinit var viewpager: ViewPager2
@@ -111,7 +112,24 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
             LinearLayoutManager(recyclerView.context, LinearLayoutManager.VERTICAL, false)
 
         if (position == 0) {
-            recyclerView.adapter = DoctorsAdapter(baseViewModel.doctors, this)
+            recyclerView.adapter = DoctorsAdapter(baseViewModel.doctors,
+                object : DoctorsAdapter.OnItemClickListener {
+                    override fun onAttachDoctor(doctorId: Int, doctor: Doctor, position: Int) {
+                        doctor.attach(doctorId, context!!, recyclerView, position)
+                    }
+
+                    override fun onAddToPlanDoctor(doctorId: Int) {
+                        if (!selectedDoctors.contains(doctorId)) {
+                            selectedDoctors.add(doctorId)
+                        } else {
+                            selectedDoctors.remove(doctorId)
+                        }
+
+                        updateCurrentPlanTable(isDoctorsChange = true, isPharmacyChange = false)
+                    }
+
+                }
+            )
 
             recyclerView.addOnScrollListener(object : PaginationScrollListener(
                 recyclerView.layoutManager as LinearLayoutManager
@@ -132,7 +150,8 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
             baseViewModel.newDoctors.observe(viewLifecycleOwner, {
                 insertNewDoctorsItems(recyclerView)
             })
-        } else {
+        }
+        else {
             recyclerView.adapter = PharmacyAdapter(baseViewModel.pharmacyList, this)
 
             recyclerView.addOnScrollListener(object : PaginationScrollListener(
@@ -185,19 +204,19 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onAttachDoctor(doctorId: Int, doctor: Doctor) {
-        this.context?.let { doctor.attach(doctorId, it) }
-    }
+//    override fun onAttachDoctor(doctorId: Int, doctor: Doctor) {
+//        this.context?.let { doctor.attach(doctorId, it) }
+//    }
 
-    override fun onAddToPlanDoctor(doctorId: Int) {
-        if (!selectedDoctors.contains(doctorId)) {
-            selectedDoctors.add(doctorId)
-        } else {
-            selectedDoctors.remove(doctorId)
-        }
-
-        updateCurrentPlanTable(isDoctorsChange = true, isPharmacyChange = false)
-    }
+//    override fun onAddToPlanDoctor(doctorId: Int) {
+//        if (!selectedDoctors.contains(doctorId)) {
+//            selectedDoctors.add(doctorId)
+//        } else {
+//            selectedDoctors.remove(doctorId)
+//        }
+//
+//        updateCurrentPlanTable(isDoctorsChange = true, isPharmacyChange = false)
+//    }
 
     private fun searchPharmacy() {
         isLoadingPharmacy = true

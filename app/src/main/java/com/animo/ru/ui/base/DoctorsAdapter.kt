@@ -21,7 +21,7 @@ class DoctorsAdapter(
 ) : RecyclerSwipeAdapter<DoctorsAdapter.DoctorHolder>() {
 
     interface OnItemClickListener {
-        fun onAttachDoctor(doctorId: Int, doctor: Doctor)
+        fun onAttachDoctor(doctorId: Int, doctor: Doctor, position: Int)
         fun onAddToPlanDoctor(doctorId: Int)
     }
 
@@ -84,7 +84,7 @@ class DoctorsAdapter(
             if (holder.adapterPosition != RecyclerView.NO_POSITION) {
                 closeAllItems()
                 val id = getPositionKey(holder.adapterPosition)
-                doctors[id]?.let { it1 -> listener.onAttachDoctor(id, it1) }
+                doctors[id]?.let { it1 -> listener.onAttachDoctor(id, it1, holder.adapterPosition) }
             }
         }
 
@@ -130,6 +130,11 @@ class DoctorsAdapter(
         }
 
         return 0
+    }
+
+    fun removeItem(id: Int, position: Int) {
+        doctors.remove(id)
+        notifyItemRemoved(position)
     }
 
     fun update(modelList: TreeMap<Int, Doctor>) {
