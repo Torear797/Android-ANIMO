@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string-array name="regions">
+        <item>Москва</item>
+        <item>Белгород</item>
+    </string-array>
+
     <string-array name="specialty">
         <item>Терапевт</item>
         <item>Педиатр</item>
@@ -15,8 +21,8 @@
     </string-array>
 
     <string-array name="activity">
-        <item>Все</item>
         <item>Активные</item>
+        <item>Все</item>
         <item>Неактивные</item>
     </string-array>
 

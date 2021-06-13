@@ -134,6 +134,7 @@ class DoctorsAdapter(
 
     fun update(modelList: TreeMap<Int, Doctor>) {
         doctors.clear()
+        notifyDataSetChanged()
         doctors.putAll(modelList)
         notifyItemRangeInserted(0, modelList.size)
     }

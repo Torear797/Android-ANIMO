@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +13,7 @@ import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.Doctor
 import com.animo.ru.models.Pharmacy
-import com.animo.ru.models.answers.SearchDoctorsAnswer
 import com.animo.ru.models.answers.SearchPharmacyAnswer
-import com.animo.ru.ui.share.ShareBottomSheetDialog
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.showToast
 import com.google.android.material.tabs.TabLayout
@@ -23,7 +22,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import kotlin.collections.HashMap
 
 class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
     PharmacyAdapter.OnItemClickListener {
@@ -31,16 +29,7 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
 
     private lateinit var viewpager: ViewPager2
 
-    private val doctors = TreeMap<Int, Doctor>()
-    private val newDoctors = TreeMap<Int, Doctor>()
-    private val searchDoctorOptions = HashMap<String, String>()
-
-    private val pharmacyList = TreeMap<Int, Pharmacy>()
-    private val newPharmacyList = TreeMap<Int, Pharmacy>()
-    private val searchPharmacyOptions = HashMap<String, String>()
-
     private var isLastDoctorPage: Boolean = false
-    private var isLoadingDoctor: Boolean = false
 
     private var isLastPharmacyPage: Boolean = false
     private var isLoadingPharmacy: Boolean = false
@@ -50,6 +39,8 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
 
     private val selectedDoctors = ArrayList<Int>()
     private val selectedPharmacy = ArrayList<Int>()
+
+    private val baseViewModel: BaseViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +57,8 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
         countPharmacy = view.findViewById(R.id.countPharmText)
 
         viewpager = view.findViewById(R.id.viewpager)
+        viewpager.isUserInputEnabled = false
+
         val tabLayout: TabLayout = view.findViewById(R.id.tab_layout)
 
         viewpager.adapter = ViewPagerAdapter()
@@ -76,15 +69,6 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
             tab.text = mFragmentTitleList[position]
         }.attach()
 
-        searchDoctorOptions["start"] = 0.toString()
-        searchDoctorOptions["countOnPage"] = 3.toString()
-
-        searchPharmacyOptions["start"] = 0.toString()
-        searchPharmacyOptions["countOnPage"] = 3.toString()
-        searchPharmacyOptions["searchAll"] = "true"
-        searchPharmacyOptions["active"] = "1"
-        searchPharmacyOptions["region"] = App.user.getFirstRegionId().toString()
-        searchPharmacyOptions["med_representative"] = App.user.id.toString()
 
         updateCurrentPlanTable(isDoctorsChange = true, isPharmacyChange = true)
 
@@ -104,10 +88,12 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
 
         override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
             (holder.view as? RecyclerView)?.also {
+                initRecyclerView(it, position)
+
                 if (position == 0) {
-                    searchDoctors(it)
+                    baseViewModel.searchDoctors()
                 } else {
-                    searchPharmacy(it)
+                    searchPharmacy()
                 }
             }
         }
@@ -117,7 +103,6 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
         }
     }
 
-
     private fun initRecyclerView(recyclerView: RecyclerView, position: Int) {
         recyclerView.addItemDecoration(SpacesItemDecoration(10, 10))
         recyclerView.setHasFixedSize(true)
@@ -126,7 +111,7 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
             LinearLayoutManager(recyclerView.context, LinearLayoutManager.VERTICAL, false)
 
         if (position == 0) {
-            recyclerView.adapter = DoctorsAdapter(doctors, this)
+            recyclerView.adapter = DoctorsAdapter(baseViewModel.doctors, this)
 
             recyclerView.addOnScrollListener(object : PaginationScrollListener(
                 recyclerView.layoutManager as LinearLayoutManager
@@ -136,15 +121,19 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
                 }
 
                 override fun isLoading(): Boolean {
-                    return isLoadingDoctor
+                    return baseViewModel.isLoadingDoctor
                 }
 
                 override fun loadMoreItems() {
-                    searchDoctors(recyclerView)
+                    baseViewModel.searchDoctors()
                 }
             })
+
+            baseViewModel.newDoctors.observe(viewLifecycleOwner, {
+                insertNewDoctorsItems(recyclerView)
+            })
         } else {
-            recyclerView.adapter = PharmacyAdapter(pharmacyList, this)
+            recyclerView.adapter = PharmacyAdapter(baseViewModel.pharmacyList, this)
 
             recyclerView.addOnScrollListener(object : PaginationScrollListener(
                 recyclerView.layoutManager as LinearLayoutManager
@@ -158,8 +147,12 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
                 }
 
                 override fun loadMoreItems() {
-                    searchPharmacy(recyclerView)
+                    searchPharmacy()
                 }
+            })
+
+            baseViewModel.newPharmacyList.observe(viewLifecycleOwner, {
+                insertNewPharmacyItems(recyclerView)
             })
         }
 
@@ -178,7 +171,8 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
                     val myBottomSheet = SearchDoctorFragment()
                     myBottomSheet.show(childFragmentManager, myBottomSheet.tag)
                 } else {
-                    showToast("Поиск аптеки")
+                    val myBottomSheet = SearchPharmacyFragment()
+                    myBottomSheet.show(childFragmentManager, myBottomSheet.tag)
                 }
             }
             R.id.createPlan -> {
@@ -205,35 +199,9 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
         updateCurrentPlanTable(isDoctorsChange = true, isPharmacyChange = false)
     }
 
-    private fun searchDoctors(recyclerView: RecyclerView) {
-        isLoadingDoctor = true
-        App.mService.searchDoctors(App.user.token!!, searchDoctorOptions).enqueue(
-            object : Callback<SearchDoctorsAnswer> {
-                override fun onFailure(call: Call<SearchDoctorsAnswer>, t: Throwable) {
-                    showToast(getString(R.string.error_server_lost))
-                }
-
-                override fun onResponse(
-                    call: Call<SearchDoctorsAnswer>,
-                    response: Response<SearchDoctorsAnswer>
-                ) {
-                    if (response.isSuccessful && response.body() != null) {
-                        if (response.body()!!.status == 200.toShort()) {
-                            newDoctors.clear()
-                            newDoctors.putAll(response.body()!!.doctors)
-                            insertNewDoctorsItems(recyclerView)
-                        } else
-                            response.body()!!.text?.let { showToast(it) }
-                    }
-
-                    isLoadingDoctor = false
-                }
-            })
-    }
-
-    private fun searchPharmacy(recyclerView: RecyclerView) {
+    private fun searchPharmacy() {
         isLoadingPharmacy = true
-        App.mService.searchPharmacy(App.user.token!!, searchPharmacyOptions).enqueue(
+        App.mService.searchPharmacy(App.user.token!!, baseViewModel.searchPharmacyOptions).enqueue(
             object : Callback<SearchPharmacyAnswer> {
                 override fun onFailure(call: Call<SearchPharmacyAnswer>, t: Throwable) {
                     showToast(getString(R.string.error_server_lost))
@@ -245,10 +213,7 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
                 ) {
                     if (response.isSuccessful && response.body() != null) {
                         if (response.body()!!.status == 200.toShort()) {
-                            newPharmacyList.clear()
-                            newPharmacyList.putAll(response.body()!!.pharmacy)
-//                            (viewpager.adapter as ViewPagerAdapter).updatePharmacy()
-                            insertNewPharmacyItems(recyclerView)
+                            baseViewModel.newPharmacyList.postValue(response.body()!!.pharmacy)
                         } else
                             response.body()!!.text?.let { showToast(it) }
                     }
@@ -278,52 +243,40 @@ class BaseFragment : Fragment(), DoctorsAdapter.OnItemClickListener,
     }
 
     private fun insertNewPharmacyItems(recyclerView: RecyclerView) {
-        if (pharmacyList.isEmpty() || recyclerView.adapter == null) {
-            pharmacyList.putAll(newPharmacyList)
-            initRecyclerView(recyclerView, 1)
+        if (baseViewModel.searchPharmacyOptions["start"] == "0") {
+            (recyclerView.adapter as PharmacyAdapter).update(baseViewModel.newPharmacyList.value!!)
         } else {
-            if (searchPharmacyOptions["start"] == "0") {
-                (recyclerView.adapter as PharmacyAdapter).update(newPharmacyList)
-            } else {
-                if (newPharmacyList.size > 0) {
-                    (recyclerView.adapter as PharmacyAdapter).insertItems(
-                        pharmacyList.size,
-                        newPharmacyList
-                    )
-                }
+            if (baseViewModel.newPharmacyList.value!!.size > 0) {
+                (recyclerView.adapter as PharmacyAdapter).insertItems(
+                    baseViewModel.pharmacyList.size,
+                    baseViewModel.newPharmacyList.value!!
+                )
+            }
 
-                if (newPharmacyList.size == 0 || newPharmacyList.size < searchPharmacyOptions["countOnPage"]!!.toInt()) {
-                    isLastPharmacyPage = true
-                }
+            if (baseViewModel.newPharmacyList.value!!.size == 0 || baseViewModel.newPharmacyList.value!!.size < baseViewModel.searchPharmacyOptions["countOnPage"]!!.toInt()) {
+                isLastPharmacyPage = true
             }
         }
 
-        searchPharmacyOptions["start"] = (pharmacyList.size).toString()
-        newPharmacyList.clear()
+        baseViewModel.searchPharmacyOptions["start"] = (baseViewModel.pharmacyList.size).toString()
     }
 
     private fun insertNewDoctorsItems(recyclerView: RecyclerView) {
-        if (doctors.isEmpty() || recyclerView.adapter == null) {
-            doctors.putAll(newDoctors)
-            initRecyclerView(recyclerView, 0)
+        if (baseViewModel.searchDoctorOptions["start"] == "0") {
+            (recyclerView.adapter as DoctorsAdapter).update(baseViewModel.newDoctors.value!!)
         } else {
-            if (searchDoctorOptions["start"] == "0") {
-                (recyclerView.adapter as DoctorsAdapter).update(newDoctors)
-            } else {
-                if (newDoctors.size > 0) {
-                    (recyclerView.adapter as DoctorsAdapter).insertItems(
-                        doctors.size,
-                        newDoctors
-                    )
-                }
+            if (baseViewModel.newDoctors.value!!.size > 0) {
+                (recyclerView.adapter as DoctorsAdapter).insertItems(
+                    baseViewModel.doctors.size,
+                    baseViewModel.newDoctors.value!!
+                )
+            }
 
-                if (newDoctors.size == 0 || newDoctors.size < searchDoctorOptions["countOnPage"]!!.toInt()) {
-                    isLastDoctorPage = true
-                }
+            if (baseViewModel.newDoctors.value!!.size == 0 || baseViewModel.newDoctors.value!!.size < baseViewModel.searchDoctorOptions["countOnPage"]!!.toInt()) {
+                isLastDoctorPage = true
             }
         }
 
-        searchDoctorOptions["start"] = (doctors.size).toString()
-        newDoctors.clear()
+        baseViewModel.searchDoctorOptions["start"] = (baseViewModel.doctors.size).toString()
     }
 }
