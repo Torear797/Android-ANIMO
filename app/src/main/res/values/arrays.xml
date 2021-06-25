@@ -2,8 +2,8 @@
 <resources>
 
     <string-array name="regions">
-        <item>Москва</item>
         <item>Белгород</item>
+        <item>Москва</item>
     </string-array>
 
     <string-array name="specialty">
@@ -26,8 +26,13 @@
         <item>Неактивные</item>
     </string-array>
 
-    <string-array name="yes_no">
+    <string-array name="yes_no_all">
         <item>Все</item>
+        <item>Да</item>
+        <item>Нет</item>
+    </string-array>
+
+    <string-array name="yes_no">
         <item>Да</item>
         <item>Нет</item>
     </string-array>

@@ -17,6 +17,12 @@
         android:paddingBottom="5dp">
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/edit"
+            style="@style/swipeItem"
+            android:background="#6200EA"
+            android:src="@drawable/ic_baseline_edit_24" />
+
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/addToPlan"
             style="@style/swipeItem"
             android:background="#00C853"

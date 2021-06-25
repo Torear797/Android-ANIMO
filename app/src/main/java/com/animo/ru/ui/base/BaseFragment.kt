@@ -5,6 +5,8 @@ import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +15,7 @@ import com.animo.ru.R
 import com.animo.ru.models.Doctor
 import com.animo.ru.models.Pharmacy
 import com.animo.ru.utilities.SpacesItemDecoration
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.*
@@ -22,6 +25,7 @@ class BaseFragment : Fragment() {
     private val mFragmentTitleList = listOf("Доктора", "Аптеки")
 
     private lateinit var viewpager: ViewPager2
+    private lateinit var fab: FloatingActionButton
 
     private lateinit var countDoctors: TextView
     private lateinit var countPharmacy: TextView
@@ -30,6 +34,8 @@ class BaseFragment : Fragment() {
     private val selectedPharmacy = ArrayList<Int>()
 
     private val baseViewModel: BaseViewModel by activityViewModels()
+
+    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +48,15 @@ class BaseFragment : Fragment() {
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_base, container, false)
 
+        navController = findNavController()
+
         countDoctors = view.findViewById(R.id.countDoctorText)
         countPharmacy = view.findViewById(R.id.countPharmText)
 
         viewpager = view.findViewById(R.id.viewpager)
         viewpager.isUserInputEnabled = false
+
+        fab = view.findViewById(R.id.floatingActionButton)
 
         val tabLayout: TabLayout = view.findViewById(R.id.tab_layout)
 
@@ -60,6 +70,14 @@ class BaseFragment : Fragment() {
 
 
         updateCurrentPlanTable(isDoctorsChange = true, isPharmacyChange = true)
+
+        fab.setOnClickListener {
+            if (viewpager.currentItem == 0) {
+                navController?.navigate(R.id.nav_edit_doctor, Bundle())
+            } else {
+                navController?.navigate(R.id.nav_edit_pharmacy, Bundle())
+            }
+        }
 
         return view
     }
@@ -115,6 +133,12 @@ class BaseFragment : Fragment() {
 
                         updateCurrentPlanTable(isDoctorsChange = true, isPharmacyChange = false)
                     }
+
+                    override fun onEditDoctor(doctorId: Int) {
+                        val bundle = Bundle()
+                        bundle.putInt("doctorId", doctorId)
+                        navController?.navigate(R.id.nav_edit_doctor, bundle)
+                    }
                 }
             )
 
@@ -152,6 +176,12 @@ class BaseFragment : Fragment() {
                         }
 
                         updateCurrentPlanTable(isDoctorsChange = false, isPharmacyChange = true)
+                    }
+
+                    override fun onEditPharmacy(pharmacyId: Int) {
+                        val bundle = Bundle()
+                        bundle.putInt("pharmacyId", pharmacyId)
+                        navController?.navigate(R.id.nav_edit_pharmacy, bundle)
                     }
 
                 })

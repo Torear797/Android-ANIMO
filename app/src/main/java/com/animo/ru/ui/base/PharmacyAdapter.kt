@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.R
-import com.animo.ru.models.Doctor
 import com.animo.ru.models.Pharmacy
 import com.animo.ru.utilities.deleteListener
 import com.daimajia.swipe.SwipeLayout
@@ -23,6 +22,7 @@ class PharmacyAdapter(
     interface OnItemClickListener {
         fun onAttachPharmacy(pharmacy: Pharmacy, position: Int)
         fun onAddToPlanPharmacy(pharmacyId: Int)
+        fun onEditPharmacy(pharmacyId: Int)
     }
 
     inner class PharmacyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,11 +35,13 @@ class PharmacyAdapter(
         private val swipeLayout: SwipeLayout = itemView.findViewById(R.id.swipeLayout)
         val attach: ImageView = itemView.findViewById(R.id.attach)
         val addToPlan: ImageView = itemView.findViewById(R.id.addToPlan)
+        val edit: ImageView = itemView.findViewById(R.id.edit)
 
         fun bind(pharmacy: Pharmacy) {
             fio.text = "${pharmacy.name} ${pharmacy.fio} ${pharmacy.post}"
-            pharmInfo.text = "Последний визит: ${pharmacy.lastVisit}, Визитов: ${pharmacy.countVisits}"
-            pharmExtendedInfo.text =  HtmlCompat.fromHtml(
+            pharmInfo.text =
+                "Последний визит: ${pharmacy.lastVisit}, Визитов: ${pharmacy.countVisits}"
+            pharmExtendedInfo.text = HtmlCompat.fromHtml(
                 "<strong>Сетевая: </strong> ${pharmacy.isNetworking}, <strong>Договор: </strong> ${pharmacy.regionName}," +
                         "<strong>Регион: </strong> ${pharmacy.regionName}, <strong>Город: </strong> ${pharmacy.city}, " +
                         "<strong>Адрес: </strong> ${pharmacy.address}, <strong>Email: </strong> ${pharmacy.email}" +
@@ -84,7 +86,12 @@ class PharmacyAdapter(
             if (holder.adapterPosition != RecyclerView.NO_POSITION) {
                 closeAllItems()
                 val id = getPositionKey(holder.adapterPosition)
-                pharmacyList[id]?.let { it1 -> listener.onAttachPharmacy(it1, holder.adapterPosition) }
+                pharmacyList[id]?.let { it1 ->
+                    listener.onAttachPharmacy(
+                        it1,
+                        holder.adapterPosition
+                    )
+                }
             }
         }
 
@@ -94,6 +101,13 @@ class PharmacyAdapter(
                 listener.onAddToPlanPharmacy(getPositionKey(holder.adapterPosition))
             }
         }
+
+        holder.edit.setOnClickListener {
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                closeAllItems()
+                listener.onEditPharmacy(getPositionKey(holder.adapterPosition))
+            }
+        }
     }
 
     override fun onViewDetachedFromWindow(holder: PharmacyAdapter.PharmacyHolder) {
@@ -101,6 +115,7 @@ class PharmacyAdapter(
         deleteListener(holder.arrow)
         deleteListener(holder.attach)
         deleteListener(holder.addToPlan)
+        deleteListener(holder.edit)
     }
 
     override fun getSwipeLayoutResourceId(position: Int): Int {

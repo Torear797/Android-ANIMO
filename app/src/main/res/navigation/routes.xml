@@ -63,11 +63,30 @@
         android:id="@+id/nav_base"
         android:name="com.animo.ru.ui.base.BaseFragment"
         android:label="@string/base_title"
-        tools:layout="@layout/fragment_base" />
+        tools:layout="@layout/fragment_base" >
+        <action
+            android:id="@+id/action_nav_base_to_nav_edit_doctor"
+            app:destination="@id/nav_edit_doctor" />
+        <action
+            android:id="@+id/action_nav_base_to_nav_edit_pharmacy"
+            app:destination="@id/nav_edit_pharmacy" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_record_loyalty"
         android:name="com.animo.ru.ui.activity_tab.plans_reports.RecordLoyaltyFragment"
         android:label="@string/record_loyalty_string"
         tools:layout="@layout/fragment_record_loyalty" />
+
+    <fragment
+        android:id="@+id/nav_edit_doctor"
+        android:name="com.animo.ru.ui.base.EditDoctorFragment"
+        android:label="@string/edit"
+        tools:layout="@layout/fragment_edit_doctor" />
+
+    <fragment
+        android:id="@+id/nav_edit_pharmacy"
+        android:name="com.animo.ru.ui.base.EditPharmacyFragment"
+        android:label="@string/edit"
+        tools:layout="@layout/fragment_edit_pharmacy" />
 </navigation>

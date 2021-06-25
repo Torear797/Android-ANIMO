@@ -13,7 +13,6 @@ import com.animo.ru.utilities.deleteListener
 import com.daimajia.swipe.SwipeLayout
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
 import java.util.*
-import kotlin.collections.HashMap
 
 class DoctorsAdapter(
     private val doctors: TreeMap<Int, Doctor>,
@@ -23,6 +22,7 @@ class DoctorsAdapter(
     interface OnItemClickListener {
         fun onAttachDoctor(doctorId: Int, doctor: Doctor, position: Int)
         fun onAddToPlanDoctor(doctorId: Int)
+        fun onEditDoctor(doctorId: Int)
     }
 
     inner class DoctorHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,11 +35,13 @@ class DoctorsAdapter(
         private val swipeLayout: SwipeLayout = itemView.findViewById(R.id.swipeLayout)
         val attach: ImageView = itemView.findViewById(R.id.attach)
         val addToPlan: ImageView = itemView.findViewById(R.id.addToPlan)
+        val edit: ImageView = itemView.findViewById(R.id.edit)
 
         fun bind(doctor: Doctor) {
             fio.text = doctor.fio
-            docInfo.text = "Последний ОВ: ${doctor.ov}, Последний ДВ: ${doctor.dv}, Визитов: ${doctor.countVisits}, Специальность: ${doctor.specName}"
-            docExtendedInfo.text =  HtmlCompat.fromHtml(
+            docInfo.text =
+                "Последний ОВ: ${doctor.ov}, Последний ДВ: ${doctor.dv}, Визитов: ${doctor.countVisits}, Специальность: ${doctor.specName}"
+            docExtendedInfo.text = HtmlCompat.fromHtml(
                 "<strong>Организация: </strong> ${doctor.organization}, " +
                         "<strong>Регион: </strong> ${doctor.regionName}, <strong>Город: </strong> ${doctor.city}, " +
                         "<strong>Название и адрес организации: </strong> ${doctor.lpu}, <strong>Должность: </strong> ${doctor.post}" +
@@ -94,6 +96,13 @@ class DoctorsAdapter(
                 listener.onAddToPlanDoctor(getPositionKey(holder.adapterPosition))
             }
         }
+
+        holder.edit.setOnClickListener {
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                closeAllItems()
+                listener.onEditDoctor(getPositionKey(holder.adapterPosition))
+            }
+        }
     }
 
     override fun onViewDetachedFromWindow(holder: DoctorHolder) {
@@ -101,6 +110,7 @@ class DoctorsAdapter(
         deleteListener(holder.arrow)
         deleteListener(holder.attach)
         deleteListener(holder.addToPlan)
+        deleteListener(holder.edit)
     }
 
     override fun getSwipeLayoutResourceId(position: Int): Int {
