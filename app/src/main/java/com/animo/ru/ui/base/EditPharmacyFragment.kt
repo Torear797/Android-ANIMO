@@ -2,6 +2,7 @@ package com.animo.ru.ui.base
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.animo.ru.App
@@ -21,6 +22,8 @@ class EditPharmacyFragment : Fragment() {
     private lateinit var surname: TextInputEditText
     private lateinit var firstName: TextInputEditText
     private lateinit var patronymic: TextInputEditText
+    private lateinit var region: Spinner
+    private lateinit var city: TextInputEditText
 
     private var pharmacyId = 0
 
@@ -57,6 +60,8 @@ class EditPharmacyFragment : Fragment() {
         surname = view.findViewById(R.id.field_surname)
         firstName = view.findViewById(R.id.field_first_name)
         patronymic = view.findViewById(R.id.field_patronymic)
+        region = view.findViewById(R.id.field_region)
+        city = view.findViewById(R.id.field_city)
 
         return view
     }
@@ -126,5 +131,14 @@ class EditPharmacyFragment : Fragment() {
         surname.setText(pharmacy.surname)
         firstName.setText(pharmacy.firstName)
         patronymic.setText(pharmacy.patronymic)
+
+        /** HARDCODE - Скорее всего приложение никогда и никому непонадобиться. В противном случае - переработать*/
+        if (pharmacy.region == "Москва") {
+            region.setSelection(1)
+        } else {
+            region.setSelection(0)
+        }
+
+        city.setText(pharmacy.city)
     }
 }
