@@ -190,4 +190,12 @@ interface RetrofitServices {
         @Field("first_name") first_name: String,
         @Field("patronymic") patronymic: String
     ): Call<BaseAnswer>
+
+    @FormUrlEncoded
+    @POST("Mobileapi/sendInReport")
+    fun sendPlanToReport(
+        @Header("Authorization") token: String,
+        @Field("planId") planId: Int,
+        @Field("status") status: Int
+    ): Call<BaseAnswer>
 }

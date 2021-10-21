@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.animo.ru.App
 import com.animo.ru.R
 import com.animo.ru.models.GuideData
+import com.animo.ru.models.Plan
 import com.animo.ru.models.answers.RecordLoyaltyFormDataAnswer
 import com.animo.ru.ui.base.DoctorsAdapter
 import com.animo.ru.utilities.GuideSpinnerAdapter
 import com.animo.ru.utilities.SpacesItemDecoration
 import com.animo.ru.utilities.showToast
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,6 +32,8 @@ class RecordLoyaltyFragment : Fragment(), RecordLoyaltyDataAdapter.OnItemClickLi
     private val doctorsList: MutableList<GuideData> = ArrayList()
     private var specNameEditText: TextInputEditText? = null
     private var recyclerView: RecyclerView? = null
+    private var planId: Int? = null
+    private var plan: Plan? = null
 
     private val recordLoyaltyViewModel: RecordLoyaltyViewModel by activityViewModels()
 
@@ -37,6 +41,8 @@ class RecordLoyaltyFragment : Fragment(), RecordLoyaltyDataAdapter.OnItemClickLi
         super.onCreate(savedInstanceState)
         arguments?.let {
             doctorsList.addAll(it.getParcelableArrayList<GuideData>("doctors") as ArrayList<GuideData>)
+            planId = it.getInt("planId")
+            plan = it.getSerializable("plan") as Plan
         }
     }
 
@@ -45,6 +51,14 @@ class RecordLoyaltyFragment : Fragment(), RecordLoyaltyDataAdapter.OnItemClickLi
         savedInstanceState: Bundle?
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_record_loyalty, container, false)
+
+        val sendToReportBtn: MaterialButton = view.findViewById(R.id.send_btn)
+
+        sendToReportBtn.setOnClickListener {
+            if (planId != null && plan != null) {
+                context?.let { it1 -> plan!!.sendToReportInLoyaltyForm(planId!!, it1) }
+            }
+        }
 
         val doctorsSpinner: Spinner = view.findViewById(R.id.doctors)
         specNameEditText = view.findViewById(R.id.specName)

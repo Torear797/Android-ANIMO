@@ -131,6 +131,14 @@ class EditDoctorFragment : Fragment() {
         name.setText(doctor.name)
         patronymic.setText(doctor.patronymic)
 //        region.setSelection(0)
+
+        /** HARDCODE - Скорее всего приложение никогда и никому непонадобиться. В противном случае - переработать*/
+        if (doctor.region == "Москва") {
+            region.setSelection(1)
+        } else {
+            region.setSelection(0)
+        }
+
         city.setText(doctor.city)
 //        specialization.setSelection(0)
     }

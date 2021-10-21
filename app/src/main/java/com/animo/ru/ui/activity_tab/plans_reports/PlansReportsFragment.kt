@@ -110,16 +110,16 @@ class PlansReportsFragment : Fragment(), PlansAdapter.OnPlansClickListener {
     }
 
     override fun onDeletePlan(plan: Plan, id: Int, position: Int) {
-        this.context?.let { plan.deletePlan(id, it, recyclerView!!,position) }
+        this.context?.let { plan.deletePlan(id, it, recyclerView!!, position) }
     }
 
-    override fun onSendPlan(plan: Plan, id: Int) {
-        checkDoctorsForRecordLoyalty(id)
+    override fun onSendPlan(plan: Plan, id: Int, position: Int) {
+        checkDoctorsForRecordLoyalty(plan, id, position)
     }
 
-    private fun checkDoctorsForRecordLoyalty(id: Int){
+    private fun checkDoctorsForRecordLoyalty(plan: Plan, id: Int, position: Int) {
         App.user.token?.let { it ->
-            App.mService.getDoctorsSelectForLoyalty(it,id).enqueue(
+            App.mService.getDoctorsSelectForLoyalty(it, id).enqueue(
                 object : Callback<GuideDataAnswer> {
                     override fun onFailure(call: Call<GuideDataAnswer>, t: Throwable) {
                         showToast(getString(R.string.error_server_lost))
@@ -135,11 +135,21 @@ class PlansReportsFragment : Fragment(), PlansAdapter.OnPlansClickListener {
                                 val list = arrayListOf<GuideData>()
                                 response.body()!!.data.forEach { (_, value) -> list.add(value) }
 
-                                if(list.isNotEmpty()){
+                                if (list.isNotEmpty()) {
                                     val bundle = Bundle()
                                     bundle.putParcelableArrayList("doctors", list)
+                                    bundle.putSerializable("plan", plan)
+                                    bundle.putInt("planId", id)
                                     navController?.navigate(R.id.nav_record_loyalty, bundle)
+                                } else {
+                                    context?.let { it1 ->
+                                        plan.sendToReportInList(
+                                            id,
+                                            it1, recyclerView!!, position
+                                        )
+                                    }
                                 }
+
                             } else
                                 response.body()!!.text?.let { showToast(it) }
                         }

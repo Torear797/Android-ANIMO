@@ -19,7 +19,7 @@ class PlansAdapter(
 
     interface OnPlansClickListener {
         fun onDeletePlan(plan: Plan, id: Int, position: Int)
-        fun onSendPlan(plan: Plan, id: Int)
+        fun onSendPlan(plan: Plan, id: Int, position: Int)
     }
 
     inner class PlansHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -63,7 +63,8 @@ class PlansAdapter(
                 plans[getPositionKey(holder.adapterPosition)]?.let {
                     listener.onSendPlan(
                         it,
-                        getPositionKey(holder.adapterPosition)
+                        getPositionKey(holder.adapterPosition),
+                        holder.adapterPosition
                     )
                 }
             }
